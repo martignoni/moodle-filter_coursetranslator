@@ -6,8 +6,11 @@
             <form class="col-4 px-0">
                 <div class="form-group">
                     <label class="d-none">Select Target Language</label>
-                    <select class="form-control">
+                    <select class="translatable-locale-switcher form-control">
                         <option>Select Target Language</option>
+                        {{#langs}}
+                            <option value="{{code}}">{{lang}}</option>
+                        {{/langs}}
                     </select>
                 </div>
             </form>

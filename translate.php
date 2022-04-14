@@ -3,16 +3,19 @@
 require_once('../../config.php');
 require_once './classes/output/translate_page.php';
 $course_id = required_param('course_id', PARAM_INT);
+$lang = optional_param('lang', 'en', PARAM_NOTAGS);
 $course = $DB->get_record('course', array('id' => $course_id), '*', MUST_EXIST);
-$translatables = $DB->get_records('filter_translatable', array('course_id' => $course_id));
+$translatables = $DB->get_records('filter_translatable', array('course_id' => $course_id, 'lang' => $lang));
 
 // setup page
+$context = context_course::instance($course_id);
+$PAGE->set_context($context);
 require_login();
-require_capability('filter/translatable:edittranslations', context_system::instance());
+require_capability('filter/translatable:edittranslations', $context);
 
 // set initial page layout
 $title = get_string('translate_page_title', 'filter_translatable');
-$PAGE->set_url('/filter/translatable/translate.php', array('course_id' => $cm->id));
+$PAGE->set_url('/filter/translatable/translate.php', array('course_id' => $course_id));
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('standard');

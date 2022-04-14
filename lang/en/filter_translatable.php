@@ -26,8 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 // filter name strings
+$string['pluginname'] = 'Translatable Content';
 $string['filtername'] = 'Translatable Content';
 $string['translate_page_title'] = 'Translate Content';
+$string['translatable:edittranslations'] = 'Edit Translations';
 
 // deepl strings
 $string['apikey'] = 'API Key for DeepL Translate';
@@ -35,5 +37,6 @@ $string['apikey_desc'] = 'You need to get an API key from DeepL to use the trans
 $string['usedeepl'] = 'Use DeepL';
 $string['usedeepl_desc'] = 'Check this checkbox if you want the plugin to use the DeepL translate api, otherwise auto generated translations are same as original';
 
-// edit strings
-$string['edittranslation'] = 'Edit translation';
+// token strings
+$string['wstoken'] = 'Web Service Token';
+$string['wstoken_desc'] = 'Generate a Web Service token and enter it here.';
