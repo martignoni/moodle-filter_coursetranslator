@@ -9,14 +9,14 @@
                     <select class="translatable-locale-switcher form-control">
                         <option>Select Target Language</option>
                         {{#langs}}
-                            <option value="{{code}}">{{lang}}</option>
+                            <option value="{{code}}" {{selected}}>{{lang}}</option>
                         {{/langs}}
                     </select>
                 </div>
             </form>
             <div class="col-4"></div>
-            <div class="col-4">
-                <p>Total Word Count: </p>
+            <div class="col-4 px-0">
+                <p class="text-right">Total Word Count: {{wordcount}}</p>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <li class="row align-items-start border-bottom py-3 bg-primary text-white">
             <div class="col-1">ID</div>
             <div class="col-5 px-0">Source Text</div>
-            <div class="col-6 px-0 pl-5">Translation</div>
+            <div class="col-6 px-0 pl-5">{{lang}} Translation</div>
         </li>
 
         {{#translatables}}
@@ -34,6 +34,7 @@
                 <div class="col-5 px-0 filter-translatable__source-text">{{{sourcetext}}}</div>
                 <div class="col-6 px-0 pl-5 filter-translatable__translation">
                     <div class="format-{{textformat}} translatable-editor" contenteditable="true" data-id="{{id}}">{{{translation}}}</div>
+                    <textarea class="translatable-editor-textarea" data-id="{{id}}">{{translation}}</textarea>
                 </div>
             </li>
         {{/translatables}}
