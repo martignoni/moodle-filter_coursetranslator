@@ -39,8 +39,8 @@ function xmldb_filter_translatable_upgrade($oldversion)
         upgrade_plugin_savepoint(true, 2020042801, 'filter', 'translatable');
     }
 
-    if ($oldversion < 2022041300) {
+    if ($oldversion < 2022041400) {
         // translatable savepoint reached.
-        upgrade_plugin_savepoint(true, 2022041300, 'filter', 'translatable');
+        upgrade_plugin_savepoint(true, 2022041400, 'filter', 'translatable');
     }
 }

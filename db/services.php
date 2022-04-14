@@ -1,12 +1,12 @@
 <?php
 
 $services = array(
-    'translatable' => array(
+    'Translatable' => array(
         'functions' => array ('filter_translatable_update_translation'),
         'requiredcapability' => 'filter/translatable:edittranslations',
         'restrictedusers' => 0,
         'enabled' => 1,
-        'shortname' =>  '',
+        'shortname' =>  'Translatable',
         'downloadfiles' => 0,
         'uploadfiles'  => 0
     )
