@@ -1,0 +1,35 @@
+
+<div class="translatable-content" data-course-id="{{course.id}}">
+
+    <div class="container">
+        <div class="row">
+            <form class="col-4 px-0">
+                <div class="form-group">
+                    <label class="d-none">Select Target Language</label>
+                    <select class="form-control">
+                        <option>Select Target Language</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <ul class="container">
+        <li class="row align-items-start border-bottom py-3 bg-primary text-white">
+            <div class="col-1">ID</div>
+            <div class="col-5 px-0">Source Text</div>
+            <div class="col-6 px-0 pl-5">Translation</div>
+        </li>
+
+        {{#translatables}}
+            <li class="row align-items-start border-bottom py-3">
+                <div class="col-1">{{id}}</div>
+                <div class="col-5 px-0 filter-translatable__source-text">{{{sourcetext}}}</div>
+                <div class="col-6 px-0 pl-5 filter-translatable__translation">
+                    <div class="format-{{textformat}} translatable-editor" contenteditable="true" data-id="{{id}}">{{{translation}}}</div>
+                </div>
+            </li>
+        {{/translatables}}
+    </ul>
+
+</div>
