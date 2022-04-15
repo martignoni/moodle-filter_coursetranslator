@@ -183,4 +183,57 @@
 
     $(editor).html(output);
   });
+
+  // autotranslate
+  $('.translatable-autotranslate').on('click', () => {
+
+    let target_lang = $('.translatable-content').data('lang')
+    let apikey = $('.translatable-content').data('apikey')
+
+    $('.translatable-editor').each((i, e) => {
+      let id = $(e).data('id')
+      let format = $(e).data('format')
+      let text = ''
+      let originalText = $('.filter-translatable__source-text[data-id="' + id + '"]').html()
+
+      // get the text format
+      if (format === 'plain') {
+        text = $(e).html()
+      }
+      if (format === 'html') {
+        text = $('.no-overflow', e).html()
+      }
+
+      if (text === originalText) {
+
+        // build the parms
+        let data = {
+          'text': text,
+          'source_lang': 'en',
+          'target_lang': target_lang,
+          'preserve_formatting': 1,
+          'auth_key': apikey,
+          'tag_handling': 'xml',
+          'split_sentences': 'nonewlines'
+        };
+
+        // update the translation
+        $.ajax({
+          method: "POST",
+          url: "https://api.deepl.com/v2/translate",
+          data: data
+        })
+          .done(data => {
+            console.log(data)
+            $(e).html(data.translations[0].text)
+            $(e).trigger('focusout')
+          })
+          .fail(error => {
+            console.log(error)
+          })
+      }
+
+    })
+  });
+
 })(jQuery);

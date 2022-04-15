@@ -104,10 +104,6 @@ class filter_translatable extends moodle_text_filter {
             } else {
                 $SESSION->filter_translatable->strings[$id] = $translatedtext;
             }
-
-            // edit link
-            $translatedtext .= '<a target="_blank" data-action="translation-edit" data-recordid="'.$id.'" href="'.$CFG->wwwroot.'/admin/tool/translationmanager/edit.php?id='.$id.'">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
         }
 
         // return the edit link
@@ -166,16 +162,52 @@ class filter_translatable extends moodle_text_filter {
     public function generate_translation($text, $language) {
         global $CFG;
 
+        return $text;
+
         // return existing text if machine translation disabled
-        if (get_config('filter_translatable', 'usedeepl') ==  0) {
+        if (get_config('filter_translatable', 'usedeepl') ===  0) {
             return $text;
         }
 
+        // supported deepl languages
+        $deeplSupportedLanguages = [
+            "BG",
+            "CS",
+            "DA",
+            "DE",
+            "EL",
+            "EN",
+            "ES",
+            "ET",
+            "FI",
+            "FR",
+            "HU",
+            "IT",
+            "JA",
+            "LT",
+            "LV",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "RU",
+            "SK",
+            "SL",
+            "SV",
+            "ZH",
+        ];
+
         // get the language
         $language = str_replace('_wp', '', $language);
-        require_once($CFG->libdir. "/filelib.php");
+        $supported = in_array(strtolower($language), array_map('strtolower', $deeplSupportedLanguages));
+
+        // language unsupported
+        if (!$supported) {
+            return $text;
+        }
 
         // build new curl request
+        require_once($CFG->libdir. "/filelib.php");
         $curl = new curl();
         $params = [
             'text' => $text,
@@ -190,9 +222,9 @@ class filter_translatable extends moodle_text_filter {
         $resp = json_decode($resp);
 
         // get the translation
-        if (!empty($resp->data->translations[0]->text)
-                && $resp->data->translations[0]->detected_source_language=== $language) {
-            return $resp->data->translations[0]->text;
+        if (!empty($resp->translations[0]->text)
+                && $resp->translations[0]->detected_source_language !== $language) {
+            return $resp->translations[0]->text;
         }
         // fallback if translation fails
         else {

@@ -1,5 +1,5 @@
 
-<div class="translatable-content" data-course-id="{{course.id}}" data-wstoken="{{wstoken}}">
+<div class="translatable-content" data-course-id="{{course.id}}" data-wstoken="{{wstoken}}" data-apikey="{{apikey}}" data-lang="{{current_lang}}">
 
     <div class="container-fluid">
         <div class="row">
@@ -16,6 +16,9 @@
             <div class="col-4"></div>
             <div class="col-4 px-0">
                 <p class="text-right">Total Word Count: {{wordcount}}</p>
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary translatable-autotranslate">Autotranslate</button>
+                </div>
             </div>
         </div>
     </div>
@@ -30,9 +33,14 @@
         {{#translatables}}
             <li class="row align-items-start border-bottom py-3">
                 <div class="col-1">{{id}}</div>
-                <div class="col-5 px-0 filter-translatable__source-text">{{{sourcetext}}}</div>
+                <div class="col-5 px-0 filter-translatable__source-text" data-id="{{id}}">{{{sourcetext}}}</div>
                 <div class="col-6 px-0 pl-5 filter-translatable__translation">
-                    <div class="format-{{textformat}} translatable-editor" contenteditable="true" data-id="{{id}}">{{{translation}}}</div>
+                    <div
+                        class="format-{{textformat}} translatable-editor"
+                        contenteditable="true"
+                        data-id="{{id}}"
+                        data-format="{{textformat}}"
+                    >{{{translation}}}</div>
                 </div>
             </li>
         {{/translatables}}
