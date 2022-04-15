@@ -30,3 +30,22 @@
 .filter-translatable__editor-tools {
     margin-bottom: 0.5rem;
 }
+
+.filter-translatable__error {
+    background: #facbcb;
+}
+
+.filter-translatable__success {
+    background: #e3fadc;
+}
+
+.filter-translatable__success-message {
+    background: #b4fa9f;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    padding: 0.25rem 1rem;
+    position: absolute;
+    bottom: 9px;
+    right: 9px;
+    border-radius: 4px;
+}

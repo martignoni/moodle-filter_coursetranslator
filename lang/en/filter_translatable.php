@@ -40,3 +40,5 @@ $string['usedeepl_desc'] = 'Check this checkbox if you want the plugin to use th
 // token strings
 $string['wstoken'] = 'Web Service Token';
 $string['wstoken_desc'] = 'Generate a Web Service token and enter it here.';
+$string['wstoken_missing'] = 'Web Service Token is Missing';
+$string['wstoken_instruction'] = 'An administrator needs to setup the <a href="{$a}">web service token.</a>';

@@ -1,13 +1,12 @@
 
-<div class="translatable-content" data-course-id="{{course.id}}">
+<div class="translatable-content" data-course-id="{{course.id}}" data-wstoken="{{wstoken}}">
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <form class="col-4 px-0">
                 <div class="form-group">
-                    <label class="d-none">Select Target Language</label>
-                    <select class="translatable-locale-switcher form-control">
-                        <option>Select Target Language</option>
+                    <label for="select-target-language">Select Target Language</label>
+                    <select name="select-target-language" class="translatable-locale-switcher form-control">
                         {{#langs}}
                             <option value="{{code}}" {{selected}}>{{lang}}</option>
                         {{/langs}}
@@ -21,7 +20,7 @@
         </div>
     </div>
 
-    <ul class="container">
+    <ul class="container-fluid">
         <li class="row align-items-start border-bottom py-3 bg-primary text-white">
             <div class="col-1">ID</div>
             <div class="col-5 px-0">Source Text</div>
@@ -34,7 +33,6 @@
                 <div class="col-5 px-0 filter-translatable__source-text">{{{sourcetext}}}</div>
                 <div class="col-6 px-0 pl-5 filter-translatable__translation">
                     <div class="format-{{textformat}} translatable-editor" contenteditable="true" data-id="{{id}}">{{{translation}}}</div>
-                    <textarea class="translatable-editor-textarea" data-id="{{id}}">{{translation}}</textarea>
                 </div>
             </li>
         {{/translatables}}

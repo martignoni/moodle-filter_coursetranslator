@@ -49,16 +49,16 @@ class filter_translatable extends moodle_text_filter {
 
         // get current language
         $language = current_language();
-        if ($CFG->lang == $language) {
+        if ($CFG->lang === $language) {
             return $text;
         }
 
         // get the text format
         $format = 0;
         if (isset($options['originalformat'])) {
-            if ($options['originalformat'] == FORMAT_HTML) {
+            if ($options['originalformat'] === FORMAT_HTML) {
                 $format = FORMAT_HTML;
-            } else if ($options['originalformat'] == FORMAT_PLAIN){
+            } else if ($options['originalformat'] === FORMAT_PLAIN){
                 $format = 0;
             }
         }

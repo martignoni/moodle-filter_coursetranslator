@@ -20,7 +20,7 @@ $functions = array(
         'description'   => 'Update Translation',
         'type'          => 'write',
         'ajax'          => true,
-        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        // 'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities'  => 'filter/translatable:edittranslations',
     ),
 );
