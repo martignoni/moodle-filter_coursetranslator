@@ -5,14 +5,19 @@
  *
  * @param object $navigation
  * @param object $course
- * @param object $coursecontext
  * @return void
  */
-function filter_translatable_extend_navigation_course($navigation, $course, $coursecontext) {
-    global $COURSE;
-
-    $url = new moodle_url("/filter/translatable/translate.php?course_id=$COURSE->id");
-    $translatecontent = navigation_node::create('Translate Content', $url, navigation_node::TYPE_CUSTOM, 'Translate Content', 'devcourse');
+function filter_translatable_extend_navigation_course($navigation, $course) {
+    $url = new moodle_url("/filter/translatable/translate.php?course_id=$course->id");
+    $title = get_string('translate_page_title', 'filter_translatable');
+    $translatecontent = navigation_node::create(
+        $title,
+        $url,
+        navigation_node::TYPE_CUSTOM,
+        $title,
+        'translate',
+        new pix_icon('translate', 'translate', 'filter_translatable')
+    );
     $navigation->add_node($translatecontent);
 }
 
