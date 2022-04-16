@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Translatable
+ * Filter Multilingual
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Output_API
@@ -31,19 +31,19 @@ require_once('./classes/output/translate_page.php');
 $courseid = required_param('course_id', PARAM_INT);
 $lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-$translatables = $DB->get_records('filter_translatable', array('course_id' => $courseid, 'lang' => $lang));
+$multilinguals = $DB->get_records('filter_multilingual', array('course_id' => $courseid, 'lang' => $lang));
 
 // Setup page.
 $context = context_course::instance($courseid);
 $PAGE->set_context($context);
 require_login();
-require_capability('filter/translatable:edittranslations', $context);
+require_capability('filter/multilingual:edittranslations', $context);
 
 // Get js data.
 $jsconfig = new stdClass();
-$jsconfig->apikey = get_config('filter_translatable', 'apikey');
-$jsconfig->autotranslate = boolval(get_config('filter_translatable', 'useautotranslate'))
-    && in_array($lang, explode(',', get_string('supported_languages', 'filter_translatable')))
+$jsconfig->apikey = get_config('filter_multilingual', 'apikey');
+$jsconfig->autotranslate = boolval(get_config('filter_multilingual', 'useautotranslate'))
+    && in_array($lang, explode(',', get_string('supported_languages', 'filter_multilingual')))
     ? true
     : false;
 $jsconfig->lang = $lang;
@@ -51,17 +51,17 @@ $jsconfig->current_lang = current_language();
 $jsconfig->course_id = $courseid;
 
 // Set initial page layout.
-$title = get_string('translate_page_title', 'filter_translatable');
-$PAGE->set_url('/filter/translatable/translate.php', array('course_id' => $courseid));
+$title = get_string('translate_page_title', 'filter_multilingual');
+$PAGE->set_url('/filter/multilingual/translate.php', array('course_id' => $courseid));
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('base');
 $PAGE->set_course($course);
-$PAGE->requires->css('/filter/translatable/styles.css');
-$PAGE->requires->js_call_amd('filter_translatable/translatable', 'init', array($jsconfig));
+$PAGE->requires->css('/filter/multilingual/styles.css');
+$PAGE->requires->js_call_amd('filter_multilingual/multilingual', 'init', array($jsconfig));
 
 // Get the renderer.
-$output = $PAGE->get_renderer('filter_translatable');
+$output = $PAGE->get_renderer('filter_multilingual');
 
 // Output header.
 echo $output->header();
@@ -69,8 +69,10 @@ echo $output->header();
 // Course name heading.
 echo $output->heading($course->fullname);
 
+// var_dump(get_fast_modinfo($courseid));
+
 // Output translation grid.
-$renderable = new \filter_translatable\output\translate_page($translatables, $course);
+$renderable = new \filter_multilingual\output\translate_page($multilinguals, $course);
 echo $output->render($renderable, $course);
 
 // Output footer.

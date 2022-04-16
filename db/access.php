@@ -17,10 +17,10 @@
 /**
  * Moodle Edit Translations Permissions
  *
- * Adds filter/translatable:eddittranslations permissions for checking against
+ * Adds filter/multilingual:eddittranslations permissions for checking against
  * the webservice.
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @copyright  based on work by 2020 Farhan Karmali <farhan6318@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
 
 // Filter Capabilities.
 $capabilities = [
-    'filter/translatable:edittranslations' => [
+    'filter/multilingual:edittranslations' => [
         'captype' => 'write',
         'riskbitmaskt' => 'RISK_CONFIG',
         'contextlevel' => CONTEXT_SYSTEM,

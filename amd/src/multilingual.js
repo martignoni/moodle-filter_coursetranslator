@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * @module     filter_translatable/translatable
+ * @module     filter_multilingual/multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -31,7 +31,7 @@ export const init = (config) => {
 
   // Autosave Translation String
   let autsavedMsg = "";
-  str.get_string('t_autosaved', 'filter_translatable')
+  str.get_string('t_autosaved', 'filter_multilingual')
     .done(string => {
       autsavedMsg = string;
     });
@@ -74,7 +74,7 @@ export const init = (config) => {
    * @returns void
    */
   const autotranslateButton = document.querySelector(
-    ".translatable-autotranslate"
+    ".multilingual-autotranslate"
   );
   if (config.autotranslate) {
     autotranslateButton.classList.remove("d-none");
@@ -87,11 +87,11 @@ export const init = (config) => {
    * @returns void
    */
   autotranslateButton.addEventListener("click", () => {
-    document.querySelectorAll(".translatable-editor").forEach((editor) => {
+    document.querySelectorAll(".multilingual-editor").forEach((editor) => {
       let id = editor.getAttribute("data-id");
       let text = editor.innerHTML;
       let originalText = document.querySelector(
-        '.filter-translatable__source-text[data-id="' + id + '"]'
+        '.filter-multilingual__source-text[data-id="' + id + '"]'
       ).innerHTML;
 
       if (text === originalText) {
@@ -148,17 +148,17 @@ export const init = (config) => {
   const saveTranslation = (id, translation, editor) => {
     // Success Message
     const successMessage = () => {
-      editor.classList.add("filter-translatable__success");
+      editor.classList.add("filter-multilingual__success");
       // Add saved indicator
       let indicator =
-        '<div class="filter-translatable__success-message" data-id="' +
+        '<div class="filter-multilingual__success-message" data-id="' +
         id +
         '">' + autsavedMsg + '</div>';
       editor.after(...stringToHTML(indicator));
       // Remove success message after a few seconds
       setTimeout(() => {
         let indicatorNode = document.querySelector(
-          '.filter-translatable__success-message[data-id="' + id + '"]'
+          '.filter-multilingual__success-message[data-id="' + id + '"]'
         );
         editor.parentNode.removeChild(indicatorNode);
       }, 3000);
@@ -166,13 +166,13 @@ export const init = (config) => {
 
     // Error Mesage
     const errorMessage = () => {
-      editor.classList.add("filter-translatable__error");
+      editor.classList.add("filter-multilingual__error");
     };
 
     // Submit the request
     ajax.call([
       {
-        methodname: "filter_translatable_update_translation",
+        methodname: "filter_multilingual_update_translation",
         args: {
           translation: [
             {
@@ -193,7 +193,7 @@ export const init = (config) => {
         fail: (error) => {
           window.console.log("error: ", error);
           errorMessage();
-          editor.classList.addClass("filter-translatable__error");
+          editor.classList.addClass("filter-multilingual__error");
           window.console.log(error);
         },
       },
@@ -204,7 +204,7 @@ export const init = (config) => {
    * Get the Translation using Moodle Web Service
    * @returns void
    */
-  document.querySelectorAll(".translatable-editor").forEach((editor) => {
+  document.querySelectorAll(".multilingual-editor").forEach((editor) => {
     // Save translation
     editor.addEventListener("focusout", () => {
       let id = editor.getAttribute("data-id");
@@ -215,21 +215,21 @@ export const init = (config) => {
 
     // Remove status classes
     editor.addEventListener("click", () => {
-      editor.classList.remove("filter-translatable__success");
-      editor.classList.remove("filter-translatable__error");
+      editor.classList.remove("filter-multilingual__success");
+      editor.classList.remove("filter-multilingual__error");
     });
   });
 
   /**
-   * Add Editor to .translatable editor
+   * Add Editor to .multilingual editor
    */
   document
-    .querySelectorAll(".translatable-editor.format-html")
+    .querySelectorAll(".multilingual-editor.format-html")
     .forEach((editor) => {
       let id = editor.getAttribute("data-id");
 
       let controls =
-        '<div class="filter-translatable__editor-tools" data-id="' +
+        '<div class="filter-multilingual__editor-tools" data-id="' +
         id +
         '">' +
         '<div class="btn-toolbar" role="toolbar" aria-label="Editor Toolbar">' +
@@ -262,7 +262,7 @@ export const init = (config) => {
   /**
    * Switch Translation Language
    */
-  let localeSwitcher = document.querySelector(".translatable-locale-switcher");
+  let localeSwitcher = document.querySelector(".multilingual-locale-switcher");
   localeSwitcher.addEventListener("change", (e) => {
     let url = new URL(window.location.href);
     let searchParams = url.searchParams;
@@ -277,9 +277,9 @@ export const init = (config) => {
    */
   document.querySelectorAll(".t-editor-button").forEach((button) => {
     button.addEventListener("click", () => {
-      // @todo let id = button.closest('.filter-translatable__editor-tools').getAttribute('data-id');
+      // @todo let id = button.closest('.filter-multilingual__editor-tools').getAttribute('data-id');
       let method = button.getAttribute("data-method");
-      // @todo let editor = document.querySelector('.translatable-editor[data-id="' + id + '"]');
+      // @todo let editor = document.querySelector('.multilingual-editor[data-id="' + id + '"]');
       // @todo let html = editor.innerHTML;
 
       switch (method) {

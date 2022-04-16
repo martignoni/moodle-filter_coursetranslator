@@ -21,16 +21,16 @@
  * @param object $course
  * @return void
  */
-function filter_translatable_extend_navigation_course($navigation, $course) {
+function filter_multilingual_extend_navigation_course($navigation, $course) {
 
     // Get current language.
     $lang = current_language();
 
     // Build a moodle url.
-    $url = new moodle_url("/filter/translatable/translate.php?course_id=$course->id&course_lang=$lang");
+    $url = new moodle_url("/filter/multilingual/translate.php?course_id=$course->id&course_lang=$lang");
 
     // Get title of translate page for navigation menu.
-    $title = get_string('translate_page_title', 'filter_translatable');
+    $title = get_string('translate_page_title', 'filter_multilingual');
 
     // Navigation node.
     $translatecontent = navigation_node::create(
@@ -39,7 +39,7 @@ function filter_translatable_extend_navigation_course($navigation, $course) {
         navigation_node::TYPE_CUSTOM,
         $title,
         'translate',
-        new pix_icon('icon', 'icon', 'filter_translatable')
+        new pix_icon('icon', 'icon', 'filter_multilingual')
     );
     $navigation->add_node($translatecontent);
 }

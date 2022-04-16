@@ -14,14 +14,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div class="translatable-content">
+<div class="multilingual-content">
 
     <div class="container-fluid">
         <div class="row">
             <form class="col-4 px-0">
                 <div class="form-group">
-                    <label for="select-target-language">{{#str}}t_select_target_language,filter_translatable{{/str}}</label>
-                    <select name="select-target-language" class="translatable-locale-switcher form-control">
+                    <label for="select-target-language">{{#str}}t_select_target_language,filter_multilingual{{/str}}</label>
+                    <select name="select-target-language" class="multilingual-locale-switcher form-control">
                         {{#langs}}
                             <option value="{{code}}" {{selected}}>{{lang}}</option>
                         {{/langs}}
@@ -30,9 +30,9 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
             </form>
             <div class="col-4"></div>
             <div class="col-4 px-0">
-                <p class="text-right">{{#str}}t_word_count,filter_translatable, {{wordcount}}{{/str}}</p>
+                <p class="text-right">{{#str}}t_word_count,filter_multilingual, {{wordcount}}{{/str}}</p>
                 <div class="text-right">
-                    <button type="button" class="btn btn-primary translatable-autotranslate d-none">{{#str}}t_autotranslate,filter_translatable{{/str}}</button>
+                    <button type="button" class="btn btn-primary multilingual-autotranslate d-none">{{#str}}t_autotranslate,filter_multilingual{{/str}}</button>
                 </div>
             </div>
         </div>
@@ -40,25 +40,25 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
     <ul class="container-fluid">
         <li class="row align-items-start border-bottom py-3 bg-primary text-white">
-            <div class="col-2">{{#str}}t_id,filter_translatable{{/str}}</div>
-            <div class="col-5 px-0 pr-5">{{#str}}t_source_text,filter_translatable{{/str}}</div>
-            <div class="col-5 px-0">{{#str}}t_translation,filter_translatable,{{lang}}{{/str}}</div>
+            <div class="col-2">{{#str}}t_id,filter_multilingual{{/str}}</div>
+            <div class="col-5 px-0 pr-5">{{#str}}t_source_text,filter_multilingual{{/str}}</div>
+            <div class="col-5 px-0">{{#str}}t_translation,filter_multilingual,{{lang}}{{/str}}</div>
         </li>
 
-        {{#translatables}}
+        {{#multilinguals}}
             <li class="row align-items-start border-bottom py-3">
                 <div class="col-2">{{id}}</div>
-                <div class="col-5 px-0 pr-5 filter-translatable__source-text" data-id="{{id}}">{{{sourcetext}}}</div>
-                <div class="col-5 px-0 filter-translatable__translation">
+                <div class="col-5 px-0 pr-5 filter-multilingual__source-text" data-id="{{id}}">{{{sourcetext}}}</div>
+                <div class="col-5 px-0 filter-multilingual__translation">
                     <div
-                        class="format-{{textformat}} translatable-editor"
+                        class="format-{{textformat}} multilingual-editor"
                         contenteditable="true"
                         data-id="{{id}}"
                         data-format="{{textformat}}"
                     >{{{translation}}}</div>
                 </div>
             </li>
-        {{/translatables}}
+        {{/multilinguals}}
     </ul>
 
 </div>

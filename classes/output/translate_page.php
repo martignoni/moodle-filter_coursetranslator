@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace filter_translatable\output;
+namespace filter_multilingual\output;
 
 use renderable;
 use renderer_base;
@@ -24,9 +24,9 @@ use stdClass;
 /**
  * Translate Page Output
  *
- * Provides output class for /filter/translatable/translate.php
+ * Provides output class for /filter/multilingual/translate.php
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,11 +35,11 @@ class translate_page implements renderable, templatable {
     /**
      * Constructor
      *
-     * @param object $translatables Translatable items
+     * @param object $multilinguals Multilingual items
      * @param object $course Moodle course record
      */
-    public function __construct($translatables, $course) {
-        $this->translatables = $translatables;
+    public function __construct($multilinguals, $course) {
+        $this->multilinguals = $multilinguals;
         $this->course = $course;
         $this->langs = get_string_manager()->get_list_of_translations();
         $this->current_lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
@@ -54,14 +54,14 @@ class translate_page implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
 
-        // Process translatable content.
-        $translatablecontent = [];
+        // Process multilingual content.
+        $multilingualcontent = [];
         $wordcount = 0;
-        foreach ($this->translatables as $item) {
+        foreach ($this->multilinguals as $item) {
             // Build the wordcount.
             $wordcount = $wordcount + str_word_count($item->sourcetext);
-            // Add the item to translatables.
-            array_push($translatablecontent, $item);
+            // Add the item to multilinguals.
+            array_push($multilingualcontent, $item);
         }
 
         $langs = [];
@@ -75,7 +75,7 @@ class translate_page implements renderable, templatable {
         }
 
         // Data for mustache template.
-        $data->translatables = $translatablecontent;
+        $data->multilinguals = $multilingualcontent;
         $data->course = $this->course;
         $data->langs = $langs;
         $data->lang = $this->langs[$this->current_lang];

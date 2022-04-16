@@ -17,26 +17,26 @@
 /**
  * DB Migrations
  *
- * Creates filter_translatable table for storing and accessing translations.
+ * Creates filter_multilingual table for storing and accessing translations.
  * Provides migration paths for plugin upgrades.
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @copyright  based on work by 2020 Farhan Karmali <farhan6318@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @param      string $oldversion
  * @see        https://docs.moodle.org/dev/Upgrade_API
  */
-function xmldb_filter_translatable_upgrade($oldversion) {
+function xmldb_filter_multilingual_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
 
     // Initial Release.
     if ($oldversion < 2020042801) {
-        // Define table filter_translatable to be created.
-        $table = new xmldb_table('filter_translatable');
+        // Define table filter_multilingual to be created.
+        $table = new xmldb_table('filter_multilingual');
 
-        // Adding fields to table filter_translatable.
+        // Adding fields to table filter_multilingual.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('course_id', XMLDB_TYPE_BIGINT, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('hashkey', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
@@ -51,31 +51,31 @@ function xmldb_filter_translatable_upgrade($oldversion) {
         $table->add_field('translation', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
         $table->add_field('hidefromtable', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
 
-        // Adding keys to table filter_translatable.
+        // Adding keys to table filter_multilingual.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
-        // Adding indexes to table filter_translatable.
+        // Adding indexes to table filter_multilingual.
         $table->add_index('hashkeyindex', XMLDB_INDEX_NOTUNIQUE, ['hashkey']);
 
-        // Conditionally launch create table for filter_translatable.
+        // Conditionally launch create table for filter_multilingual.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Translatable savepoint reached.
-        upgrade_plugin_savepoint(true, 2020042801, 'filter', 'translatable');
+        // Multilingual savepoint reached.
+        upgrade_plugin_savepoint(true, 2020042801, 'filter', 'multilingual');
     }
 
     // Added Web Service.
     if ($oldversion < 2022041400) {
-        // Translatable savepoint reached.
-        upgrade_plugin_savepoint(true, 2022041400, 'filter', 'translatable');
+        // Multilingual savepoint reached.
+        upgrade_plugin_savepoint(true, 2022041400, 'filter', 'multilingual');
     }
 
     // Preparing for Moodle Submission.
     if ($oldversion < 2022041600) {
-        // Translatable savepoint reached.
-        upgrade_plugin_savepoint(true, 2022041600, 'filter', 'translatable');
+        // Multilingual savepoint reached.
+        upgrade_plugin_savepoint(true, 2022041600, 'filter', 'multilingual');
     }
 
 }

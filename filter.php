@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Translatable Filter
+ * Multilingual Filter
  *
  * @package    filter
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
@@ -23,10 +23,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Filters
  */
-class filter_translatable extends moodle_text_filter {
+class filter_multilingual extends moodle_text_filter {
 
     // Database table name.
-    const TABLENAME = 'filter_translatable';
+    const TABLENAME = 'filter_multilingual';
+
+    public function __construct($context, array $localconfig) {
+        parent::__construct($context, $localconfig);
+        $this->context = $context;
+
+        // test against course context
+        try {
+            $this->course_context = $context->get_course_context(true);
+        } catch (Exception $e) {
+            $this->course_context = false;
+        }
+    }
 
     /**
      * Filter
@@ -39,7 +51,7 @@ class filter_translatable extends moodle_text_filter {
         global $CFG;
 
         // No need to translate empty or numeric text.
-        if (empty($text) or is_numeric($text)) {
+        if (empty($text) || is_numeric($text) || $this->course_context === false) {
             return $text;
         }
 
@@ -49,7 +61,7 @@ class filter_translatable extends moodle_text_filter {
             return $text;
         }
 
-        // Get the text format.
+        // Get the text format. Set Plain Format to 0.
         $format = 0;
         if (isset($options['originalformat'])) {
             if ($options['originalformat'] === FORMAT_HTML) {
@@ -90,21 +102,6 @@ class filter_translatable extends moodle_text_filter {
             $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format);
         }
 
-        // Check for permission to translate.
-        if (has_capability('filter/translatable:edittranslations', $this->context)) {
-
-            // Get translations.
-            $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'id', 0, 1);
-            $id = reset($records)->id;
-
-            if (!isset($SESSION->filter_translatable)) {
-                $SESSION->filter_translatable = new stdClass();
-                $SESSION->filter_translatable->strings = [];
-            } else {
-                $SESSION->filter_translatable->strings[$id] = $translatedtext;
-            }
-        }
-
         // Return the translated text for display.
         return $translatedtext;
     }
@@ -137,7 +134,7 @@ class filter_translatable extends moodle_text_filter {
             'course_id' => isset($courseid) ? $courseid : 0, // Set to 0 if course_id not found to avoid null errors.
             'hashkey' => $hashkey,
             'sourcetext' => $text,
-            'textformat' => $format ? 'html' : 'plain',
+            'textformat' => boolval($format) ? 'html' : 'plain',
             'timecreated' => time(),
             'lang' => $language,
             'url' => str_replace($CFG->wwwroot, '', $PAGE->url->out()),
@@ -164,17 +161,17 @@ class filter_translatable extends moodle_text_filter {
         global $CFG;
 
         // Return existing text if machine translation disabled.
-        if (boolval(get_config('filter_translatable', 'usedeepl')) === false) {
+        if (boolval(get_config('filter_multilingual', 'usedeepl')) === false) {
             return $text;
         }
 
         // Autotranslate not enabled.
-        if (boolval(get_config('filter_translatable', 'ondemand_autotranslate')) === false) {
+        if (boolval(get_config('filter_multilingual', 'ondemand_autotranslate')) === false) {
             return $text;
         }
 
         // Supported languages.
-        $supportedlangsstring = get_string('supported_languages', 'filter_translatable');
+        $supportedlangsstring = get_string('supported_languages', 'filter_multilingual');
         $supportedlanguages = explode(',', $supportedlangsstring);
 
         // Get the language.
@@ -194,7 +191,7 @@ class filter_translatable extends moodle_text_filter {
             'source_lang' => 'en',
             'target_lang' => $language,
             'preserve_formatting' => 1,
-            'auth_key' => get_config('filter_translatable', 'apikey'),
+            'auth_key' => get_config('filter_multilingual', 'apikey'),
             'tag_handling' => 'xml',
             'split_sentences' => 'nonewlines'
         ];

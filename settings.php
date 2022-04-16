@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Translatable Settings Page
+ * Filter Multilingual Settings Page
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Admin_settings
@@ -30,36 +30,36 @@ if ($ADMIN->fulltree) {
     // Use deepl machine translation.
     $settings->add(
         new admin_setting_configcheckbox(
-            'filter_translatable/usedeepl',
-            get_string('usedeepl', 'filter_translatable'
+            'filter_multilingual/usedeepl',
+            get_string('usedeepl', 'filter_multilingual'
         ),
-        get_string('usedeepl_desc', 'filter_translatable'), false));
+        get_string('usedeepl_desc', 'filter_multilingual'), false));
 
     // DeepL apikey.
     $settings->add(
         new admin_setting_configtext(
-            'filter_translatable/apikey',
-            get_string('apikey', 'filter_translatable'
+            'filter_multilingual/apikey',
+            get_string('apikey', 'filter_multilingual'
         ),
-        get_string('apikey_desc', 'filter_translatable'), null, PARAM_RAW_TRIMMED, 40)
+        get_string('apikey_desc', 'filter_multilingual'), null, PARAM_RAW_TRIMMED, 40)
     );
 
     // Use ondemand autotranslation.
     $settings->add(
         new admin_setting_configcheckbox(
-            'filter_translatable/ondemand_autotranslate',
-            get_string('ondemand_autotranslate', 'filter_translatable'
+            'filter_multilingual/ondemand_autotranslate',
+            get_string('ondemand_autotranslate', 'filter_multilingual'
         ),
-        get_string('ondemand_autotranslate_desc', 'filter_translatable'), false)
+        get_string('ondemand_autotranslate_desc', 'filter_multilingual'), false)
     );
 
     // Use translation page autotranslation.
     $settings->add(
         new admin_setting_configcheckbox(
-            'filter_translatable/useautotranslate',
-            get_string('useautotranslate', 'filter_translatable'
+            'filter_multilingual/useautotranslate',
+            get_string('useautotranslate', 'filter_multilingual'
         ),
-        get_string('useautotranslate_desc', 'filter_translatable'), false)
+        get_string('useautotranslate_desc', 'filter_multilingual'), false)
     );
 
 }

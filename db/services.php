@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Translatable
+ * Filter Multilingual
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Web_services_API
@@ -27,12 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 // Add services definition.
 $services = array(
-    'Translatable' => array(
-        'functions' => array ('filter_translatable_update_translation'),
-        'requiredcapability' => 'filter/translatable:edittranslations',
+    'Multilingual' => array(
+        'functions' => array ('filter_multilingual_update_translation'),
+        'requiredcapability' => 'filter/multilingual:edittranslations',
         'restrictedusers' => 0,
         'enabled' => 1,
-        'shortname' => 'Translatable',
+        'shortname' => 'Multilingual',
         'downloadfiles' => 0,
         'uploadfiles'  => 0
     )
@@ -40,13 +40,13 @@ $services = array(
 
 // Add functions for webservices.
 $functions = array(
-    'filter_translatable_update_translation' => array(
-        'classname'     => 'filter_translatable_external',
+    'filter_multilingual_update_translation' => array(
+        'classname'     => 'filter_multilingual_external',
         'methodname'    => 'update_translation',
-        'classpath'     => 'filter/translatable/externallib.php',
+        'classpath'     => 'filter/multilingual/externallib.php',
         'description'   => 'Update Translation',
         'type'          => 'write',
         'ajax'          => true,
-        'capabilities'  => 'filter/translatable:edittranslations',
+        'capabilities'  => 'filter/multilingual:edittranslations',
     ),
 );

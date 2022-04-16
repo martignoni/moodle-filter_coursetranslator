@@ -18,17 +18,17 @@ defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/externallib.php");
 
 /**
- * Filter Translatable Web Service
+ * Filter Multilingual Web Service
  *
  * Adds a webservice available via ajax for the Translate Content page.
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/External_functions_API
  * @todo       Move to /external/update-translation.php
  */
-class filter_translatable_external extends external_api {
+class filter_multilingual_external extends external_api {
 
     /**
      * Update Translation Parameters
@@ -78,10 +78,10 @@ class filter_translatable_external extends external_api {
             // Security checks.
             $context = context_course::instance($translation->course_id);
             self::validate_context($context);
-            require_capability('filter/translatable:edittranslations', $context);
+            require_capability('filter/multilingual:edittranslations', $context);
 
             // Update the record.
-            $translation->id = $DB->update_record('filter_translatable', $translation);
+            $translation->id = $DB->update_record('filter_multilingual', $translation);
             $translations[] = (array)$translation;
         }
 

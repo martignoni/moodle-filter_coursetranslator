@@ -17,7 +17,7 @@
 /**
  * Full translate
  *
- * @package    filter_translatable
+ * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/String_API
@@ -26,10 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 // General strings.
-$string['pluginname'] = 'Translatable Content';
-$string['filtername'] = 'Translatable Content';
+$string['pluginname'] = 'Multilingual Content';
+$string['filtername'] = 'Multilingual Content';
 $string['translate_page_title'] = 'Translate Content';
-$string['translatable:edittranslations'] = 'Edit Translations';
+$string['multilingual:edittranslations'] = 'Edit Translations';
 
 // DeepL strings.
 $string['apikey'] = 'API Key for DeepL Translate';
