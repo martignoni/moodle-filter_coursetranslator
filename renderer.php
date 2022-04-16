@@ -24,6 +24,7 @@ use plugin_renderer_base;
  * @package    filter_translatable
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/Output_API
  */
 class renderer extends plugin_renderer_base {
 
