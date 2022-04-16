@@ -14,6 +14,7 @@ import * as str from "core/str";
  */
 export const init = (config) => {
 
+  // Autosave Translation String
   let autsavedMsg = "";
   str.get_string('t_autosaved', 'filter_translatable')
     .done(string => {
