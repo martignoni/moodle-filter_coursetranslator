@@ -15,16 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unit tests.
+ * Filter Translatable Tests
  *
- * @package filter_translatable
- * @category test
+ * @package    filter_translatable
+ * @category   test
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
 
 /**
  * Tests for filter_translatable.
@@ -42,6 +41,5 @@ class filter_translatable_filter_testcase extends advanced_testcase {
         // Enable glossary filter at top level.
         filter_set_global_state('translatable', TEXTFILTER_ON);
     }
-
 
 }

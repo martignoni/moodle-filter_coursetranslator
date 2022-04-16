@@ -14,24 +14,51 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Filter Translatable Settings Page
+ *
+ * @package    filter_translatable
+ * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    // use deepl machine translation
-    $settings->add(new admin_setting_configcheckbox('filter_translatable/usedeepl', get_string('usedeepl', 'filter_translatable'),
+    // Use deepl machine translation.
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'filter_translatable/usedeepl',
+            get_string('usedeepl', 'filter_translatable'
+        ),
         get_string('usedeepl_desc', 'filter_translatable'), false));
 
-    // deepl apikey
-    $settings->add(new admin_setting_configtext('filter_translatable/apikey', get_string('apikey', 'filter_translatable'),
-    get_string('apikey_desc', 'filter_translatable'), null, PARAM_RAW_TRIMMED, 40));
+    // DeepL apikey.
+    $settings->add(
+        new admin_setting_configtext(
+            'filter_translatable/apikey',
+            get_string('apikey', 'filter_translatable'
+        ),
+        get_string('apikey_desc', 'filter_translatable'), null, PARAM_RAW_TRIMMED, 40)
+    );
 
-    // use ondemand autotranslation
-    $settings->add(new admin_setting_configcheckbox('filter_translatable/ondemand_autotranslate', get_string('ondemand_autotranslate', 'filter_translatable'),
-        get_string('ondemand_autotranslate_desc', 'filter_translatable'), false));
+    // Use ondemand autotranslation.
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'filter_translatable/ondemand_autotranslate',
+            get_string('ondemand_autotranslate', 'filter_translatable'
+        ),
+        get_string('ondemand_autotranslate_desc', 'filter_translatable'), false)
+    );
 
-    // use translation page autotranslation
-    $settings->add(new admin_setting_configcheckbox('filter_translatable/useautotranslate', get_string('useautotranslate', 'filter_translatable'),
-        get_string('useautotranslate_desc', 'filter_translatable'), false));
+    // Use translation page autotranslation.
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'filter_translatable/useautotranslate',
+            get_string('useautotranslate', 'filter_translatable'
+        ),
+        get_string('useautotranslate_desc', 'filter_translatable'), false)
+    );
 
 }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,20 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Full translate
+ * Translatable Filter
  *
  * @package    filter
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-/**
- * Translatable Filter for Moodle
- */
 class filter_translatable extends moodle_text_filter {
 
+    // Database table name.
     const TABLENAME = 'filter_translatable';
 
     /**
@@ -42,28 +36,28 @@ class filter_translatable extends moodle_text_filter {
     public function filter($text, array $options = []) {
         global $CFG;
 
-        // no need to translate empty or numeric text
+        // No need to translate empty or numeric text.
         if (empty($text) or is_numeric($text)) {
             return $text;
         }
 
-        // get current language
+        // Get current language.
         $language = current_language();
         if ($CFG->lang === $language) {
             return $text;
         }
 
-        // get the text format
+        // Get the text format.
         $format = 0;
         if (isset($options['originalformat'])) {
             if ($options['originalformat'] === FORMAT_HTML) {
                 $format = FORMAT_HTML;
-            } else if ($options['originalformat'] === FORMAT_PLAIN){
+            } else if ($options['originalformat'] === FORMAT_PLAIN) {
                 $format = 0;
             }
         }
 
-        // return the translation
+        // Return the translation.
         return $this->get_translation($text, $language, $format);
     }
 
@@ -77,24 +71,27 @@ class filter_translatable extends moodle_text_filter {
      */
     public function get_translation($text, $language, $format) {
         global $DB, $CFG, $SESSION;
+
+        // Generate hashkey.
         $hashkey = sha1(trim($text));
+
+        // Get records based on hashkey.
         $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
         if (isset(reset($records)->translation)) {
             $translatedtext = reset($records)->translation;
         }
 
-        // get translation if it exists
+        // Get translation if it exists else generate translation.
         if (isset($translatedtext)) {
             $DB->set_field(self::TABLENAME, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
-        }
-        // generate translation
-        else {
+        } else {
             $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format);
         }
 
-        // check for permission to translate
+        // Check for permission to translate.
         if (has_capability('filter/translatable:edittranslations', $this->context)) {
 
+            // Get translations.
             $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'id', 0, 1);
             $id = reset($records)->id;
 
@@ -106,7 +103,7 @@ class filter_translatable extends moodle_text_filter {
             }
         }
 
-        // return the edit link
+        // Return the translated text for display.
         return $translatedtext;
     }
 
@@ -121,19 +118,21 @@ class filter_translatable extends moodle_text_filter {
      */
     public function generate_translation_update_database($text, $language, $hashkey, $format) {
         global $DB, $PAGE, $CFG, $COURSE;
-        $course_id = $COURSE->id;
+
+        // Processing vars.
+        $courseid = $COURSE->id;
         $translation = $this->generate_translation($text, $language);
 
         if ($translation) {
-           $hidefromtable = 0;
+            $hidefromtable = 0;
         } else {
             $translation = $text;
             $hidefromtable = 1;
         }
 
-        // build the translation record
+        // Build the translation record.
         $record = (object) [
-            'course_id' => isset($course_id) ? $course_id : 0, // set to 0 if course_id not found to avoid null errors
+            'course_id' => isset($courseid) ? $courseid : 0, // Set to 0 if course_id not found to avoid null errors.
             'hashkey' => $hashkey,
             'sourcetext' => $text,
             'textformat' => $format ? 'html' : 'plain',
@@ -145,10 +144,10 @@ class filter_translatable extends moodle_text_filter {
             'hidefromtable' => $hidefromtable
         ];
 
-        // insert the record into the database
+        // Insert the record into the database.
         $DB->insert_record(self::TABLENAME, $record);
 
-        // return the translation
+        // Return the translation.
         return $translation;
     }
 
@@ -162,30 +161,30 @@ class filter_translatable extends moodle_text_filter {
     public function generate_translation($text, $language) {
         global $CFG;
 
-        // return existing text if machine translation disabled
+        // Return existing text if machine translation disabled.
         if (boolval(get_config('filter_translatable', 'usedeepl')) === false) {
             return $text;
         }
 
-        // autotranslate not enabled
+        // Autotranslate not enabled.
         if (boolval(get_config('filter_translatable', 'ondemand_autotranslate')) === false) {
             return $text;
         }
 
-        // supported languages
-        $supportedLangsString = get_string('supported_languages', 'filter_translatable');
-        $supportedLanguages = explode(',', $supportedLangsString);
+        // Supported languages.
+        $supportedlangsstring = get_string('supported_languages', 'filter_translatable');
+        $supportedlanguages = explode(',', $supportedlangsstring);
 
-        // get the language
+        // Get the language.
         $language = str_replace('_wp', '', $language);
-        $supported = in_array(strtolower($language), array_map('strtolower', $supportedLanguages));
+        $supported = in_array(strtolower($language), array_map('strtolower', $supportedlanguages));
 
-        // language unsupported
+        // Language unsupported.
         if (!$supported) {
             return $text;
         }
 
-        // build new curl request
+        // Build new curl request.
         require_once($CFG->libdir. "/filelib.php");
         $curl = new curl();
         $params = [
@@ -200,13 +199,11 @@ class filter_translatable extends moodle_text_filter {
         $resp = $curl->post('https://api.deepl.com/v2/translate?', $params);
         $resp = json_decode($resp);
 
-        // get the translation
+        // Get the translation and return translation.
         if (!empty($resp->translations[0]->text)
                 && $resp->translations[0]->detected_source_language !== $language) {
             return $resp->translations[0]->text;
-        }
-        // fallback if translation fails
-        else {
+        } else {
             return $text;
         }
     }

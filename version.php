@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Full translate
+ * Filter Translatable
  *
- * @package    filter
+ * @package    filter_translatable
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022041400;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2019111200;        // Requires this Moodle version
-$plugin->component = 'filter_translatable'; // Full name of the plugin (used for diagnostics)
+$plugin->version   = 2022041400;            // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2019111200;            // Requires this Moodle version.
+$plugin->component = 'filter_translatable'; // Full name of the plugin (used for diagnostics).
