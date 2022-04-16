@@ -19,6 +19,7 @@
  *
  * @package    filter
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
+ * @copyright  based on work by 2020 Farhan Karmali <farhan6318@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filter_translatable extends moodle_text_filter {

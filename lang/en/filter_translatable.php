@@ -39,7 +39,7 @@ $string['ondemand_autotranslate'] = 'Enable on demand autotranslate';
 $string['ondemand_autotranslate_desc'] = 'Enable autotranslated content on page load. This can cause a long page load when generating autotranslations for the first time.';
 $string['useautotranslate'] = 'Enable autotranslate for translation page';
 $string['useautotranslate_desc'] = 'Enable autotranslate on the translation page. This gives translators the abilty to autotranslate content without enabling autotranslate on individual page loads.';
-$string['supported_languages'] = 'bg,cs,da,de,el,en,es,et,fi,fr,hu,it,ja,lt,lv,nl,pl,pt,ro,ru,sk,sl,sv,zh'; // do not change between translations
+$string['supported_languages'] = 'bg,cs,da,de,el,en,es,et,fi,fr,hu,it,ja,lt,lv,nl,pl,pt,ro,ru,sk,sl,sv,zh'; // Do not change between translations.
 
 // Template strings.
 $string['t_select_target_language'] = 'Select Target Language';
