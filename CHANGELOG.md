@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2022-04-16
 
 ### Added
-- Initial Release
+- Initial release
+- Translate content page
+- Web Service for ajax database updates
+- Text filter for translation output
+- DB migration scripts
 
 ## Changelog Format
 
