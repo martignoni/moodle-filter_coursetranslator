@@ -1,6 +1,6 @@
 # Translatable for Moodle
 
-Translatable is a derivation of [Content Translation Manager](https://moodle.org/plugins/tool_translationmanager) and [Fulltranslate](https://moodle.org/plugins/filter_fulltranslate) merged into a single plugin. It provides a content translation page for courses and automatic machine translation using the DeepL Pro Translation api. This filter needs to be placed first in your filter stack.
+Translatable is a derivative of [Content Translation Manager](https://moodle.org/plugins/tool_translationmanager) and [Fulltranslate](https://moodle.org/plugins/filter_fulltranslate) merged into a single plugin. It provides a content translation page for courses and automatic machine translation using the DeepL Pro Translation api. This filter needs to be placed first in your filter stack.
 
 ## Installation
 
