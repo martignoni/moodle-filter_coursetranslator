@@ -8,7 +8,11 @@ Clone or download this plugin to ```/moodlewww/filter/translatable``` and run th
 
 ## Configuration
 
-```Navigate to Site Administration -> Plugins -> Filter -> Translatable Content.```
+```Navigate to Site Administration -> Plugins -> Filters -> Manage filters```
+
+Enable the Translatable Content filter for Content and headings and move it to the top of the list.
+
+```Navigate to Site Administration -> Plugins -> Filters -> Translatable Content```
 
 This plugin provides integration with the [DeepL Pro API.](https://www.deepl.com/en/docs-api/) In order to use this integration, you must signup for a Pro account and generate an API key. You can then save the API key to the Translatable Content settings page.
 
