@@ -35,7 +35,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 $PAGE->set_pagelayout('base');
 $PAGE->set_course($course);
-$PAGE->requires->css('/filter/translatable/style.css');
+$PAGE->requires->css('/filter/translatable/styles.css');
 $PAGE->requires->js_call_amd('filter_translatable/translatable', 'init', array($jsconfig));
 
 // get the renderer

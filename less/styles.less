@@ -1,44 +1,56 @@
+// import bootstrap icons
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
+// responsive iframes
 .filter-translatable__source-text iframe,
 .filter-translatable__translation iframe {
     max-width: 100%;
 }
 
-.filter-translatable__translation .translatable-editor {
-    border: 1px solid #bbb;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    resize: both;
-    overflow: auto;
-}
-.filter-translatable__translation textarea.translatable-editor-textarea {
-    display: none;
-    width: 100%;
-    min-height: 500px;
+// editor tweaks
+.filter-translatable__translation {
+
+    .translatable-editor {
+        border: 1px solid #bbb;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        resize: both;
+        overflow: auto;
+
+        &.format-html {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+    }
 }
 
-.filter-translatable__translation .translatable-editor.format-html {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+// content
+.translatable-content {
+
+    ul {
+
+        li {
+
+            &:last-child {
+                border-bottom: 0 !important;
+            }
+        }
+    }
 }
 
-.translatable-content ul li:last-child {
-    border-bottom: 0 !important;
-}
-
+// editor tools
 .filter-translatable__editor-tools {
     margin-bottom: 0.5rem;
 }
 
+
+// ui notices
 .filter-translatable__error {
     background: #facbcb;
 }
-
 .filter-translatable__success {
     background: #e3fadc;
 }
-
 .filter-translatable__success-message {
     background: #b4fa9f;
     font-size: 0.6rem;
