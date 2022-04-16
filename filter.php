@@ -162,44 +162,23 @@ class filter_translatable extends moodle_text_filter {
     public function generate_translation($text, $language) {
         global $CFG;
 
-        return $text;
-
         // return existing text if machine translation disabled
-        if (get_config('filter_translatable', 'usedeepl') ===  0) {
+        if (boolval(get_config('filter_translatable', 'usedeepl')) === false) {
             return $text;
         }
 
-        // supported deepl languages
-        $deeplSupportedLanguages = [
-            "BG",
-            "CS",
-            "DA",
-            "DE",
-            "EL",
-            "EN",
-            "ES",
-            "ET",
-            "FI",
-            "FR",
-            "HU",
-            "IT",
-            "JA",
-            "LT",
-            "LV",
-            "NL",
-            "PL",
-            "PT",
-            "RO",
-            "RU",
-            "SK",
-            "SL",
-            "SV",
-            "ZH",
-        ];
+        // autotranslate not enabled
+        if (boolval(get_config('filter_translatable', 'ondemand_autotranslate')) === false) {
+            return $text;
+        }
+
+        // supported languages
+        $supportedLangsString = get_string('supported_languages', 'filter_translatable');
+        $supportedLanguages = explode(',', $supportedLangsString);
 
         // get the language
         $language = str_replace('_wp', '', $language);
-        $supported = in_array(strtolower($language), array_map('strtolower', $deeplSupportedLanguages));
+        $supported = in_array(strtolower($language), array_map('strtolower', $supportedLanguages));
 
         // language unsupported
         if (!$supported) {

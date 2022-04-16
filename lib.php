@@ -8,8 +8,17 @@
  * @return void
  */
 function filter_translatable_extend_navigation_course($navigation, $course) {
-    $url = new moodle_url("/filter/translatable/translate.php?course_id=$course->id");
+
+    // get current language
+    $lang = current_language();
+
+    // build a moodle url
+    $url = new moodle_url("/filter/translatable/translate.php?course_id=$course->id&course_lang=$lang");
+
+    // get title of translate page for navigation menu
     $title = get_string('translate_page_title', 'filter_translatable');
+
+    // navigation node
     $translatecontent = navigation_node::create(
         $title,
         $url,

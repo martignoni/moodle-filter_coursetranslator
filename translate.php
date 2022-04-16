@@ -1,7 +1,11 @@
 <?php
 
+
+// get libs
 require_once('../../config.php');
 require_once './classes/output/translate_page.php';
+
+// needed vars for processing
 $course_id = required_param('course_id', PARAM_INT);
 $lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
 $course = $DB->get_record('course', array('id' => $course_id), '*', MUST_EXIST);
@@ -13,8 +17,16 @@ $PAGE->set_context($context);
 require_login();
 require_capability('filter/translatable:edittranslations', $context);
 
-// get webservice token
-$wstoken = get_config('filter_translatable', 'wstoken');
+// get js data
+$jsconfig = new stdClass();
+$jsconfig->apikey = get_config('filter_translatable', 'apikey');
+$jsconfig->autotranslate = boolval(get_config('filter_translatable', 'useautotranslate'))
+    && in_array($lang, explode(',', get_string('supported_languages', 'filter_translatable')))
+    ? true
+    : false;
+$jsconfig->lang = $lang;
+$jsconfig->current_lang = current_language();
+$jsconfig->course_id = $course_id;
 
 // set initial page layout
 $title = get_string('translate_page_title', 'filter_translatable');
@@ -24,8 +36,7 @@ $PAGE->set_heading($title);
 $PAGE->set_pagelayout('base');
 $PAGE->set_course($course);
 $PAGE->requires->css('/filter/translatable/style.css');
-$PAGE->requires->js('/filter/translatable/javascript/jquery-3.6.0.min.js');
-$PAGE->requires->js('/filter/translatable/javascript/translatable.js');
+$PAGE->requires->js_call_amd('filter_translatable/translatable', 'init', array($jsconfig));
 
 // get the renderer
 $output = $PAGE->get_renderer('filter_translatable');
@@ -33,23 +44,12 @@ $output = $PAGE->get_renderer('filter_translatable');
 // header
 echo $output->header();
 
-// webservice token is set
-if ($wstoken) {
-    // course name heading
-    echo $output->heading($course->fullname);
+// course name heading
+echo $output->heading($course->fullname);
 
-    // content
-    $renderable = new \filter_translatable\output\translate_page($translatables, $course);
-    echo $output->render($renderable, $course);
-}
-// need to set webservice
-else {
-    // need to set webservice token
-    $wstoken_url = new moodle_url("/admin/settings.php?section=filtersettingtranslatable");
-    var_dump($jswstoken);
-    echo $output->heading(get_string('wstoken_missing', 'filter_translatable'));
-    echo '<p>' . format_text(get_string('wstoken_instruction', 'filter_translatable', $wstoken_url->__toString())) . '</p>';
-}
+// content
+$renderable = new \filter_translatable\output\translate_page($translatables, $course);
+echo $output->render($renderable, $course);
 
 // footer
 echo $output->footer();

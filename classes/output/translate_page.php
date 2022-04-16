@@ -14,9 +14,6 @@ class translate_page implements renderable, templatable {
         $this->course = $course;
         $this->langs = get_string_manager()->get_list_of_translations();
         $this->current_lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
-        $this->lang = $this->langs[$this->current_lang];
-        $this->wstoken = get_config('filter_translatable', 'wstoken');
-        $this->apikey = get_config('filter_translatable', 'apikey');
     }
 
     public function export_for_template(renderer_base $output) {
@@ -45,11 +42,8 @@ class translate_page implements renderable, templatable {
         $data->translatables = $translatable_content;
         $data->course = $this->course;
         $data->langs = $langs;
-        $data->lang = $this->lang;
-        $data->current_lang = $this->current_lang;
+        $data->lang = $this->langs[$this->current_lang];
         $data->wordcount = $wordcount;
-        $data->wstoken = $this->wstoken;
-        $data->apikey = $this->apikey;
 
         return $data;
     }

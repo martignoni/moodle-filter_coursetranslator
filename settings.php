@@ -18,16 +18,20 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    // apikey
-    $settings->add(new admin_setting_configtext('filter_translatable/apikey', get_string('apikey', 'filter_translatable'),
-        get_string('apikey_desc', 'filter_translatable'), null, PARAM_RAW_TRIMMED, 40));
-
     // use deepl machine translation
     $settings->add(new admin_setting_configcheckbox('filter_translatable/usedeepl', get_string('usedeepl', 'filter_translatable'),
         get_string('usedeepl_desc', 'filter_translatable'), false));
 
-    // use deepl machine translation
-    $settings->add(new admin_setting_configtext('filter_translatable/wstoken', get_string('wstoken', 'filter_translatable'),
-        get_string('wstoken_desc', 'filter_translatable'), null, PARAM_RAW_TRIMMED, 40));
+    // deepl apikey
+    $settings->add(new admin_setting_configtext('filter_translatable/apikey', get_string('apikey', 'filter_translatable'),
+    get_string('apikey_desc', 'filter_translatable'), null, PARAM_RAW_TRIMMED, 40));
+
+    // use ondemand autotranslation
+    $settings->add(new admin_setting_configcheckbox('filter_translatable/ondemand_autotranslate', get_string('ondemand_autotranslate', 'filter_translatable'),
+        get_string('ondemand_autotranslate_desc', 'filter_translatable'), false));
+
+    // use translation page autotranslation
+    $settings->add(new admin_setting_configcheckbox('filter_translatable/useautotranslate', get_string('useautotranslate', 'filter_translatable'),
+        get_string('useautotranslate_desc', 'filter_translatable'), false));
 
 }
