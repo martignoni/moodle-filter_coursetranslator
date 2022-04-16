@@ -6,18 +6,26 @@
 
 // import libs
 import ajax from "core/ajax";
+import * as str from "core/str";
 
 /**
  * Translation Editor UI
  * @param {Object} config JS Config
  */
 export const init = (config) => {
+
+  let autsavedMsg = "";
+  str.get_string('t_autosaved', 'filter_translatable')
+    .done(string => {
+      autsavedMsg = string;
+    });
+
   /**
    * Convert a template string into HTML DOM nodes
-   * @param  {String} str The template string
+   * @param  {String} string The template string
    * @return {Node}       The template HTML
    */
-  const stringToHTML = (str) => {
+  const stringToHTML = (string) => {
     // See if DOMParser is supported
     var support = (() => {
       if (!window.DOMParser) {
@@ -35,13 +43,13 @@ export const init = (config) => {
     // If DOMParser is supported, use it
     if (support) {
       var parser = new DOMParser();
-      var doc = parser.parseFromString(str, "text/html");
+      var doc = parser.parseFromString(string, "text/html");
       return doc.body.childNodes;
     }
 
     // Otherwise, fallback to old-school method
     var dom = document.createElement("div");
-    dom.innerHTML = str;
+    dom.innerHTML = string;
     return dom;
   };
 
@@ -129,7 +137,7 @@ export const init = (config) => {
       let indicator =
         '<div class="filter-translatable__success-message" data-id="' +
         id +
-        '">Autosaved</div>';
+        '">' + autsavedMsg + '</div>';
       editor.after(...stringToHTML(indicator));
       // Remove success message after a few seconds
       setTimeout(() => {
@@ -208,7 +216,7 @@ export const init = (config) => {
         '<div class="filter-translatable__editor-tools" data-id="' +
         id +
         '">' +
-        '<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">' +
+        '<div class="btn-toolbar" role="toolbar" aria-label="Editor Toolbar">' +
         '<div class="btn-group mr-2" role="group" aria-label="Formatting">' +
         '<button data-method="h2" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h2"></i></button>' +
         '<button data-method="h3" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h3"></i></button>' +
@@ -218,7 +226,7 @@ export const init = (config) => {
         '<button data-method="ol" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ol"></i></button>' +
         '<button data-method="ul" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ul"></i></button>' +
         "</div>" +
-        '<div class="btn-group mr-2" role="group" aria-label="Basic example">' +
+        '<div class="btn-group mr-2" role="group" aria-label="Styles">' +
         '<button data-method="b" type="button" class="t-editor-button btn btn-light"><i class="bi-type-bold"></i></button>' +
         '<button data-method="i" type="button" class="t-editor-button btn btn-light"><i class="bi-type-italic"></i></button>' +
         '<button data-method="u" type="button" class="t-editor-button btn btn-light"><i class="bi-type-underline"></i></button>' +
