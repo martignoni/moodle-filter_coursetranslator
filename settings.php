@@ -20,6 +20,7 @@
  * @package    filter_translatable
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/Admin_settings
  */
 
 defined('MOODLE_INTERNAL') || die();

@@ -24,6 +24,7 @@
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @copyright  based on work by 2020 Farhan Karmali <farhan6318@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/Access_API
  */
 
 defined('MOODLE_INTERNAL') || die();

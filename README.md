@@ -32,7 +32,7 @@ Please [submit issues here.](https://github.com/jamfire/moodle-filter_translatab
 
 ## Changelog
 
-See the [CHANGELOG.md](CHANGELOG.md) documentation.md.
+See the [CHANGES.md](CHANGES.md) documentation.md.
 
 ## Contributing
 

@@ -25,6 +25,8 @@ require_once("$CFG->libdir/externallib.php");
  * @package    filter_translatable
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/External_functions_API
+ * @todo       Move to /external/update-translation.php
  */
 class filter_translatable_external extends external_api {
 

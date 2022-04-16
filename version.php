@@ -20,10 +20,14 @@
  * @package    filter_translatable
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/version.php
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022041400;            // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2019111200;            // Requires this Moodle version.
 $plugin->component = 'filter_translatable'; // Full name of the plugin (used for diagnostics).
+$plugin->version   = 2022041600;            // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2020061500;            // Requires Moodle 3.9 LTS.
+$plugin->supported = [39, 311];             // Supported Moodle Versions.
+$plugin->maturity  = MATURITY_ALPHA;
+$plugin->release   = 'v0.9.0';

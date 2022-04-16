@@ -39,7 +39,7 @@ function filter_translatable_extend_navigation_course($navigation, $course) {
         navigation_node::TYPE_CUSTOM,
         $title,
         'translate',
-        new pix_icon('translate', 'translate', 'filter_translatable')
+        new pix_icon('icon', 'icon', 'filter_translatable')
     );
     $navigation->add_node($translatecontent);
 }

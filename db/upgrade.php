@@ -25,12 +25,14 @@
  * @copyright  based on work by 2020 Farhan Karmali <farhan6318@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @param      string $oldversion
+ * @see        https://docs.moodle.org/dev/Upgrade_API
  */
 function xmldb_filter_translatable_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
-    if ($oldversion < 2020042801) {
 
+    // Initial Release.
+    if ($oldversion < 2020042801) {
         // Define table filter_translatable to be created.
         $table = new xmldb_table('filter_translatable');
 
@@ -64,8 +66,16 @@ function xmldb_filter_translatable_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020042801, 'filter', 'translatable');
     }
 
+    // Added Web Service.
     if ($oldversion < 2022041400) {
         // Translatable savepoint reached.
         upgrade_plugin_savepoint(true, 2022041400, 'filter', 'translatable');
     }
+
+    // Preparing for Moodle Submission.
+    if ($oldversion < 2022041600) {
+        // Translatable savepoint reached.
+        upgrade_plugin_savepoint(true, 2022041600, 'filter', 'translatable');
+    }
+
 }
