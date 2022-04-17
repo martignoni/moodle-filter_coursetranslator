@@ -12,6 +12,7 @@
         <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="lastaccess" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="lang" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="sourcelang" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="url" TYPE="text" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="automatic" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="translation" TYPE="text" NOTNULL="true" SEQUENCE="false" />

@@ -32,7 +32,7 @@ class filter_multilingual extends moodle_text_filter {
         parent::__construct($context, $localconfig);
         $this->context = $context;
 
-        // test against course context
+        // Test against course context.
         try {
             $this->course_context = $context->get_course_context(true);
         } catch (Exception $e) {
@@ -137,6 +137,7 @@ class filter_multilingual extends moodle_text_filter {
             'textformat' => boolval($format) ? 'html' : 'plain',
             'timecreated' => time(),
             'lang' => $language,
+            'sourcelang' => $CFG->lang,
             'url' => str_replace($CFG->wwwroot, '', $PAGE->url->out()),
             'automatic' => true,
             'translation' => $translation,
@@ -188,7 +189,7 @@ class filter_multilingual extends moodle_text_filter {
         $curl = new curl();
         $params = [
             'text' => $text,
-            'source_lang' => 'en',
+            'source_lang' => $CFG->lang,
             'target_lang' => $language,
             'preserve_formatting' => 1,
             'auth_key' => get_config('filter_multilingual', 'apikey'),

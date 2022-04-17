@@ -78,4 +78,18 @@ function xmldb_filter_multilingual_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022041600, 'filter', 'multilingual');
     }
 
+    // Cleaned up externallib.
+    if ($oldversion < 2022041700) {
+
+        // Add sourcelang field.
+        $table = new xmldb_table('filter_multilingual');
+        $field = new xmldb_field('sourcelang', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null, 'lang');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Multilingual savepoint reached.
+        upgrade_plugin_savepoint(true, 2022041700, 'filter', 'multilingual');
+    }
+
 }

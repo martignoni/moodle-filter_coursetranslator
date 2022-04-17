@@ -41,9 +41,9 @@ $services = array(
 // Add functions for webservices.
 $functions = array(
     'filter_multilingual_update_translation' => array(
-        'classname'     => 'filter_multilingual_external',
+        'classname'     => 'mulitlingual_webservice',
         'methodname'    => 'update_translation',
-        'classpath'     => 'filter/multilingual/externallib.php',
+        'classpath'     => 'filter_multilingual\external\webservice.php',
         'description'   => 'Update Translation',
         'type'          => 'write',
         'ajax'          => true,
