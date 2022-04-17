@@ -95,20 +95,17 @@ export const init = (config) => {
       ).innerHTML;
 
       if (text === originalText) {
-        // Build the parms
-        let params = {
-          text: text,
-          source_lang: "en", // eslint-disable-line
-          target_lang: config.lang, // eslint-disable-line
-          preserve_formatting: 1, // eslint-disable-line
-          auth_key: config.apikey, // eslint-disable-line
-          tag_handling: "xml", // eslint-disable-line
-          split_sentences: "nonewlines", // eslint-disable-line
-        };
 
-        let queryString = Object.keys(params)
-          .map((key) => key + "=" + params[key])
-          .join("&");
+        let formData = new FormData();
+        formData.append("text", originalText);
+        formData.append("source_lang", "en");
+        formData.append("target_lang", config.lang);
+        formData.append("preserve_formatting", 1);
+        formData.append("auth_key", config.apikey);
+        formData.append("tag_handling", "xml");
+        formData.append("split_sentences", "nonewlines");
+
+        let url = "https://api.deepl.com/v2/translate";
 
         // Update the translation
         let xhr = new XMLHttpRequest();
@@ -118,6 +115,7 @@ export const init = (config) => {
             if (status === 0 || (status >= 200 && status < 400)) {
               // The request has been completed successfully
               let data = JSON.parse(xhr.responseText);
+              window.console.log('deepl:', id, data);
               // Display translation
               editor.innerHTML = data.translations[0].text;
               // Save translation
@@ -127,14 +125,9 @@ export const init = (config) => {
               window.console.log("error", status);
             }
           }
-          // Eeditor.innerHTML = data.translations[0].text;
         };
-        xhr.open("POST", "https://api.deepl.com/v2/translate");
-        xhr.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        );
-        xhr.send(queryString);
+        xhr.open("POST", url);
+        xhr.send(formData);
       }
     });
   });
@@ -183,7 +176,7 @@ export const init = (config) => {
           ],
         },
         done: (data) => {
-          window.console.log("data: ", data);
+          window.console.log("ws: ", id, data);
           if (data.length > 0) {
             successMessage();
           } else {
