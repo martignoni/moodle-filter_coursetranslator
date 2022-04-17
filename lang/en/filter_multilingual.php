@@ -50,3 +50,4 @@ $string['t_id'] = 'ID';
 $string['t_source_text'] = 'Source Text';
 $string['t_translation'] = 'Translation: {$a}';
 $string['t_autosaved'] = 'Autosaved';
+$string['t_selectall'] = 'Select All';

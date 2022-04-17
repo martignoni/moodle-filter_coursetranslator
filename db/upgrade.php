@@ -72,12 +72,6 @@ function xmldb_filter_multilingual_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022041400, 'filter', 'multilingual');
     }
 
-    // Preparing for Moodle Submission.
-    if ($oldversion < 2022041600) {
-        // Multilingual savepoint reached.
-        upgrade_plugin_savepoint(true, 2022041600, 'filter', 'multilingual');
-    }
-
     // Cleaned up externallib.
     if ($oldversion < 2022041700) {
 

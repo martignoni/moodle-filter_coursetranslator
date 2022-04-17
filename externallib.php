@@ -27,7 +27,7 @@ require_once("$CFG->libdir/externallib.php");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/External_functions_API
  */
-class mulitlingual_webservice extends external_api {
+class filter_multilingual_external extends external_api {
 
     /**
      * Update Translation Parameters

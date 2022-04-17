@@ -15,50 +15,100 @@ You should have received a copy of the GNU General Public License
 along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div class="multilingual-content">
-
-    <div class="container-fluid">
-        <div class="row">
-            <form class="col-4 px-0">
-                <div class="form-group">
-                    <label for="select-target-language">{{#str}}t_select_target_language,filter_multilingual{{/str}}</label>
-                    <select name="select-target-language" class="multilingual-locale-switcher form-control">
-                        {{#langs}}
-                            <option value="{{code}}" {{selected}}>{{lang}}</option>
-                        {{/langs}}
-                    </select>
-                </div>
-            </form>
-            <div class="col-4"></div>
-            <div class="col-4 px-0">
-                <p class="text-right">{{#str}}t_word_count,filter_multilingual, {{wordcount}}{{/str}}</p>
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary multilingual-autotranslate d-none">{{#str}}t_autotranslate,filter_multilingual{{/str}}</button>
-                </div>
-            </div>
+  <div class="container-fluid">
+    <div class="row">
+      <form class="col-4 px-0">
+        <div class="form-group">
+          <label for="select-target-language"
+            >{{#str}}t_select_target_language,filter_multilingual{{/str}}</label
+          >
+          <select
+            name="select-target-language"
+            class="multilingual-locale-switcher form-control"
+          >
+            {{#langs}}
+            <option value="{{ code }}" {{selected}}>{{ lang }}</option>
+            {{/langs}}
+          </select>
         </div>
+      </form>
+      <div class="col-4"></div>
+      <div class="col-4 px-0">
+        <p class="text-right">
+          {{#str}}t_word_count,filter_multilingual, {{ wordcount }}{{/str}}
+        </p>
+        <div class="text-right">
+          <button
+            type="button"
+            class="btn btn-primary multilingual-autotranslate"
+            disabled
+          >
+            {{#str}}t_autotranslate,filter_multilingual{{/str}}
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <ul class="container-fluid">
-        <li class="row align-items-start border-bottom py-3 bg-primary text-white">
-            <div class="col-2">{{#str}}t_id,filter_multilingual{{/str}}</div>
-            <div class="col-5 px-0 pr-5">{{#str}}t_source_text,filter_multilingual{{/str}}</div>
-            <div class="col-5 px-0">{{#str}}t_translation,filter_multilingual,{{lang}}{{/str}}</div>
-        </li>
+  <ul class="container-fluid">
+    <li class="row align-items-start border-bottom py-3 bg-primary text-white">
+      <div class="col-1">
+        <div class="form-check">
+          <input
+            class="form-check-input filter-multilingual_select-all"
+            type="checkbox"
+            aria-label="{{#str}}t_selectall,filter_multilingual{{/str}}"
+            title="{{#str}}t_selectall,filter_multilingual{{/str}}"
+            name="select-all"
+            disabled
+          />
+          <label class="form-check-label d-none" for="select-all">
+            {{#str}}t_selectall,filter_multilingual{{/str}}
+          </label>
+        </div>
+      </div>
+      <div class="col-1">{{#str}}t_id,filter_multilingual{{/str}}</div>
+      <div class="col-5 px-0 pr-5">
+        {{#str}}t_source_text,filter_multilingual{{/str}}
+      </div>
+      <div class="col-5 px-0">
+        {{#str}}t_translation,filter_multilingual,{{ lang }}{{/str}}
+      </div>
+    </li>
 
-        {{#multilinguals}}
-            <li class="row align-items-start border-bottom py-3">
-                <div class="col-2">{{id}}</div>
-                <div class="col-5 px-0 pr-5 filter-multilingual__source-text" data-id="{{id}}">{{{sourcetext}}}</div>
-                <div class="col-5 px-0 filter-multilingual__translation">
-                    <div
-                        class="format-{{textformat}} multilingual-editor"
-                        contenteditable="true"
-                        data-id="{{id}}"
-                        data-format="{{textformat}}"
-                    >{{{translation}}}</div>
-                </div>
-            </li>
-        {{/multilinguals}}
-    </ul>
-
+    {{#multilinguals}}
+    <li class="row align-items-start border-bottom py-3">
+      <div class="col-1">
+        <div class="form-check">
+          <input
+            class="form-check-input filter-multilingual_select"
+            type="checkbox"
+            data-id="{{id}}"
+            disabled
+          />
+          <label class="form-check-label d-none" for="defaultCheck1">
+            {{ id }}
+          </label>
+        </div>
+      </div>
+      <div class="col-1">{{ id }}</div>
+      <div
+        class="col-5 px-0 pr-5 filter-multilingual__source-text"
+        data-id="{{ id }}"
+      >
+        {{{sourcetext}}}
+      </div>
+      <div class="col-5 px-0 filter-multilingual__translation">
+        <div
+          class="format-{{ textformat }} multilingual-editor"
+          contenteditable="true"
+          data-id="{{ id }}"
+          data-format="{{ textformat }}"
+        >
+          {{{translation}}}
+        </div>
+      </div>
+    </li>
+    {{/multilinguals}}
+  </ul>
 </div>

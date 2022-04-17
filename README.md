@@ -12,6 +12,8 @@ Clone or download this plugin to ```/moodlewww/filter/multilingual``` and run th
 
 Enable the Multilingual Content filter for Content and headings and move it to the top of the list.
 
+<img src="https://ik.imagekit.io/yna8qytrq3i/moodle/manage-filter_xymoBzRnL.png" alt="Manage Filters" />
+
 ```Navigate to Site Administration -> Plugins -> Filters -> Multilingual Content```
 
 This plugin provides integration with the [DeepL Pro API.](https://www.deepl.com/en/docs-api/) In order to use this integration, you must signup for a Pro account and generate an API key. You can then save the API key to the Multilingual Content settings page.
@@ -20,15 +22,17 @@ There are two options for autogenerating machine translations. You can do it **o
 
 The other option is to enable autotranslation on the Translate Content page and click the Autotranslate button. This will generate and automatically save translations on the Translate Content page.
 
+<img src="https://ik.imagekit.io/yna8qytrq3i/moodle/manage-settings_bPPRwyFgS.png" alt="Manage Settings" />
+
 ## Generating a translation
 
 The first step is to visit a course and then change to your translation language using the Moodle locale switcher. This generates the needed table records for translation. You also need to go into each activity in order to generate table records for content in the activity as well. After you have visited each part of your course in the language you want a translation for, you can click on the course action menu and navigate to Translate Content.
 
 From this page, you can autotranslate content if you do not have ondemand autotranslation enabled. You can also hand translate string by string for your course.
 
-<img src="https://ik.imagekit.io/yna8qytrq3i/tcm/action-menu_dNXPhjsxR.png" alt="Course Action Menu" />
+<img src="https://ik.imagekit.io/yna8qytrq3i/moodle/action-menu_WQXVFq3Tc.png" alt="Course Action Menu" />
 
-<img src="https://ik.imagekit.io/yna8qytrq3i/tcm/translate-content_BmAgFAtnH.png" alt="Translate Content" />
+<img src="https://ik.imagekit.io/yna8qytrq3i/moodle/translate-content_Cw-ESoY6x.png" alt="Translate Content" />
 
 ## Submit an issue
 
