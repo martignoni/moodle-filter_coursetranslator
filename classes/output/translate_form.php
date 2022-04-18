@@ -34,9 +34,10 @@ class translate_form extends moodleform {
         $mform->disable_form_change_checker();
 
         if (isset($this->_customdata['multilinguals'])) {
+
             foreach ($this->_customdata['multilinguals'] as $item) {
                 // Open translation item.
-                $mform->addElement('html', '<li class="row align-items-start border-bottom py-3">');
+                $mform->addElement('html', '<div class="row align-items-start border-bottom py-3">');
 
                 // Checkbox.
                 $mform->addElement('html', '<div class="col-1">');
@@ -68,26 +69,29 @@ class translate_form extends moodleform {
 
                 // Translation Input.
                 $mform->addElement('html', '<div
-                    class="col-5 px-0 filter-multilingual__translation"
+                    class="col-5 px-0 filter-multilingual__translation multilingual-editor"
                     data-id="' . $item->id . '"
                 >');
+
+                // Plain text input.
                 if ($item->textformat === 'plain') {
                     $mform->addElement('html', '<div
-                        class="format-' . $item->textformat . ' multilingual-editor border py-2 px-3"
+                        class="format-' . $item->textformat . ' border py-2 px-3"
                         contenteditable="true"
-                        data-id="' . $item->id . '"
                         data-format="' . $item->textformat . '"
                     >' . $item->translation . '</div>');
                 }
+                // HTML input.
                 if ($item->textformat === 'html') {
                     $mform->addElement('editor', 'id_' . $item->id, $item->id);
                     $mform->setType('id_' . $item->id, PARAM_RAW);
                     $mform->setDefault('id_' . $item->id, array('text' => trim($item->translation)));
                 }
+
                 $mform->addElement('html', '</div>');
 
                 // Close translation item.
-                $mform->addElement('html', '</li>');
+                $mform->addElement('html', '</div>');
             }
         }
     }

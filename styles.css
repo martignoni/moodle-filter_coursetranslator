@@ -27,7 +27,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /* scroll window */
 .filter-multilingual__scroll {
     overflow: scroll;
-    height: 361px;
+    height: 375px;
     padding-top: 58px;
 }
 

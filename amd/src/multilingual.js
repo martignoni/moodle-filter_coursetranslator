@@ -135,6 +135,19 @@ export const init = (config) => {
   );
 
   /**
+   * Autotranslate Button Click
+   * @returns void
+   */
+     autotranslateButton.addEventListener("click", () => {
+      document
+        .querySelectorAll(".filter-multilingual_select:checked")
+        .forEach((e) => {
+          let id = e.getAttribute("data-id");
+          getTranslation(id);
+        });
+    });
+
+  /**
    * Send for Translation to DeepL
    * @param {Integer} id Translation ID
    */
@@ -186,25 +199,13 @@ export const init = (config) => {
   };
 
   /**
-   * Autotranslate Button Click
-   * @returns void
-   */
-  autotranslateButton.addEventListener("click", () => {
-    document
-      .querySelectorAll(".filter-multilingual_select:checked")
-      .forEach((e) => {
-        let id = e.getAttribute("data-id");
-        getTranslation(id);
-      });
-  });
-
-  /**
    * Save Translation to Moodle
    * @param  {Integer} id Translation ID
    * @param  {String} translation Translation Text
    * @param  {Node} editor HTML Editor Node
    */
   const saveTranslation = (id, translation, editor) => {
+
     // Success Message
     const successMessage = () => {
       editor.classList.add("filter-multilingual__success");
@@ -265,11 +266,13 @@ export const init = (config) => {
    * Get the Translation using Moodle Web Service
    * @returns void
    */
-  document.querySelectorAll(".multilingual-editor").forEach((editor) => {
+  document.querySelectorAll('.multilingual-editor [contenteditable="true"]').forEach((editor) => {
+
     // Save translation
     editor.addEventListener("focusout", () => {
-      let id = editor.getAttribute("data-id");
       let translation = editor.innerHTML;
+      let id = editor.closest('.multilingual-editor').getAttribute('data-id');
+      window.console.log(id, translation);
 
       saveTranslation(id, translation, editor);
     });
@@ -278,145 +281,6 @@ export const init = (config) => {
     editor.addEventListener("click", () => {
       editor.classList.remove("filter-multilingual__success");
       editor.classList.remove("filter-multilingual__error");
-    });
-  });
-
-  /**
-   * Add Editor to .multilingual editor
-   */
-  const htmlEditor = document.querySelectorAll(
-    ".multilingual-editor.format-html"
-  );
-  htmlEditor.forEach(editor => {
-    let textarea = document.createElement('textarea');
-    let textareaClasses = ['multilingual-editor', 'd-none'];
-    textarea.classList.add(...textareaClasses);
-    textarea.setAttribute('data-id', editor.getAttribute('data-id'));
-    textarea.innerHTML = editor.innerHTML.trim();
-
-    editor.after(textarea);
-  });
-  htmlEditor.forEach(editor => {
-    let id = editor.getAttribute("data-id");
-
-    let controls =
-      '<div class="filter-multilingual__editor-tools" data-id="' +
-      id +
-      '">' +
-      '<div class="btn-toolbar" role="toolbar" aria-label="Editor Toolbar">' +
-      '<div class="btn-group mr-2" role="group" aria-label="Formatting">' +
-      '<button data-method="h2" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h2"></i></button>' +
-      '<button data-method="h3" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h3"></i></button>' +
-      '<button data-method="p" type="button" class="t-editor-button btn btn-light"><i class="bi-paragraph"></i></button>' +
-      "</div>" +
-      '<div class="btn-group mr-2" role="group" aria-label="Lists">' +
-      '<button data-method="ol" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ol"></i></button>' +
-      '<button data-method="ul" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ul"></i></button>' +
-      "</div>" +
-      '<div class="btn-group mr-2" role="group" aria-label="Styles">' +
-      '<button data-method="b" type="button" class="t-editor-button btn btn-light"><i class="bi-type-bold"></i></button>' +
-      '<button data-method="i" type="button" class="t-editor-button btn btn-light"><i class="bi-type-italic"></i></button>' +
-      '<button data-method="u" type="button" class="t-editor-button btn btn-light"><i class="bi-type-underline"></i></button>' +
-      "</div>" +
-      '<div class="btn-group mr-2" role="group" aria-label="Links">' +
-      '<button data-method="l" type="button" class="t-editor-button btn btn-light"><i class="bi-link-45deg"></i></button>' +
-      "</div>" +
-      '<div class="btn-group mr-2 d-none" role="group" aria-label="HTML">' +
-      '<button data-method="html" data-active="false" type="button" class="t-editor-button btn btn-light">' +
-      '<i class="bi-code-slash"></i>' +
-      "</button>" +
-      "</div>" +
-      "</div>" +
-      "</div>";
-
-    editor.parentNode.prepend(...stringToHTML(controls));
-  });
-
-  /**
-   * Switch Translation Language
-   */
-  let localeSwitcher = document.querySelector(".multilingual-locale-switcher");
-  localeSwitcher.addEventListener("change", (e) => {
-    let url = new URL(window.location.href);
-    let searchParams = url.searchParams;
-    searchParams.set("course_lang", e.target.value);
-    let newUrl = url.toString();
-
-    window.location = newUrl;
-  });
-
-  /**
-   * Detect Editor Button Click
-   */
-  document.querySelectorAll(".t-editor-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      let id = button
-        .closest(".filter-multilingual__editor-tools")
-        .getAttribute("data-id");
-      let method = button.getAttribute("data-method");
-      let editor = document.querySelector('div.multilingual-editor[data-id="' + id + '"]');
-      let htmlEditor = document.querySelector('textarea.multilingual-editor[data-id="' + id + '"]');
-      let buttons = document.querySelectorAll(
-        '.filter-multilingual__editor-tools[data-id="' +
-          id +
-          '"] button:not([data-method="html"])'
-      );
-      let htmlButton = document.querySelector(
-        '.filter-multilingual__editor-tools[data-id="' +
-          id +
-          '"] button[data-method="html"]'
-      );
-      let active = htmlButton.getAttribute("data-active");
-
-      switch (method) {
-        case "h2":
-          document.execCommand("formatBlock", false, "<h2>");
-          break;
-        case "h3":
-          document.execCommand("formatBlock", false, "<h3>");
-          break;
-        case "p":
-          document.execCommand("formatBlock", false, "<p>");
-          break;
-        case "ol":
-          document.execCommand("insertOrderedList");
-          break;
-        case "ul":
-          document.execCommand("insertUnorderedList");
-          break;
-        case "b":
-          document.execCommand("bold");
-          break;
-        case "i":
-          document.execCommand("italic");
-          break;
-        case "u":
-          document.execCommand("underline");
-          break;
-        case "l":
-          var link = prompt("Enter a URL:", "https://");
-          document.execCommand("createLink", false, link);
-          break;
-        case "html":
-          if (active === "false") {
-            htmlButton.setAttribute("data-active", "true");
-            buttons.forEach((button) => {
-              button.disabled = true;
-            });
-            editor.classList.add('d-none');
-            htmlEditor.classList.remove('d-none');
-          } else {
-            htmlButton.setAttribute("data-active", "false");
-            buttons.forEach((button) => {
-              button.disabled = false;
-            });
-            editor.classList.remove('d-none');
-            htmlEditor.classList.add('d-none');
-          }
-          break;
-        default:
-          break;
-      }
     });
   });
 
