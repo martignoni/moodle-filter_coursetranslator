@@ -22,6 +22,7 @@
 // import libs
 import ajax from "core/ajax";
 import * as str from "core/str";
+// import * as stringeditor from "filter_multilingual/stringeditor";
 
 /**
  * Translation Editor UI
@@ -279,9 +280,16 @@ export const init = (config) => {
   /**
    * Add Editor to .multilingual editor
    */
-  document
-    .querySelectorAll(".multilingual-editor.format-html")
-    .forEach((editor) => {
+  const htmlEditor = document.querySelectorAll(".multilingual-editor.format-html");
+  // htmlEditor.forEach(editor => {
+  //   let html = stringeditor.stringToHTML(editor.innerHTML);
+  //   let nodes = stringeditor.parseNodes(html);
+  //   let output = stringeditor.outputEditor(nodes);
+
+  //   editor.classList.add('d-none');
+  //   editor.after(output);
+  // });
+  htmlEditor.forEach(editor => {
       let id = editor.getAttribute("data-id");
 
       let controls =

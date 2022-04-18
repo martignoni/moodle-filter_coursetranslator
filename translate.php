@@ -69,8 +69,6 @@ echo $output->header();
 // Course name heading.
 echo $output->heading($course->fullname);
 
-// var_dump(get_fast_modinfo($courseid));
-
 // Output translation grid.
 $renderable = new \filter_multilingual\output\translate_page($multilinguals, $course);
 echo $output->render($renderable, $course);
