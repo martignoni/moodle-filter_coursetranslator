@@ -26,15 +26,12 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /* editor tweaks */
 .filter-multilingual__translation .multilingual-editor {
-    border: 1px solid #bbb;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
     resize: both;
     overflow: auto;
 }
-.filter-multilingual__translation .format-html {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+.filter-multilingual__translation textarea.multilingual-editor {
+    width: 100%;
+    min-height: 300px;
 }
 
 /* content */

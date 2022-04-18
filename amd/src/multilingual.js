@@ -22,7 +22,6 @@
 // import libs
 import ajax from "core/ajax";
 import * as str from "core/str";
-// import * as stringeditor from "filter_multilingual/stringeditor";
 
 /**
  * Translation Editor UI
@@ -73,10 +72,12 @@ export const init = (config) => {
    */
   const toggleAutotranslateButton = () => {
     let checkboxItems = [];
-    checkboxes.forEach(e => {
+    checkboxes.forEach((e) => {
       checkboxItems.push(e.checked);
     });
-    let checked = checkboxItems.find(checked => checked === true) ? true : false;
+    let checked = checkboxItems.find((checked) => checked === true)
+      ? true
+      : false;
     window.console.log(checked);
     if (config.autotranslate && checked) {
       autotranslateButton.disabled = false;
@@ -93,34 +94,34 @@ export const init = (config) => {
     selectAll.disabled = false;
   }
   selectAll.addEventListener("click", (e) => {
-      // See if select all is checked
-      let checked = e.target.checked;
-      let checkboxes = document.querySelectorAll(".filter-multilingual_select");
+    // See if select all is checked
+    let checked = e.target.checked;
+    let checkboxes = document.querySelectorAll(".filter-multilingual_select");
 
-      // Check/uncheck checkboxes
-      if (checked) {
-        checkboxes.forEach((e) => {
-          e.checked = true;
-        });
-      } else {
-        checkboxes.forEach((e) => {
-          e.checked = false;
-        });
-      }
-      toggleAutotranslateButton();
-    });
+    // Check/uncheck checkboxes
+    if (checked) {
+      checkboxes.forEach((e) => {
+        e.checked = true;
+      });
+    } else {
+      checkboxes.forEach((e) => {
+        e.checked = false;
+      });
+    }
+    toggleAutotranslateButton();
+  });
 
   /**
    * Autotranslate Checkboxes
    */
   const checkboxes = document.querySelectorAll(".filter-multilingual_select");
   if (config.autotranslate) {
-    checkboxes.forEach(e => {
+    checkboxes.forEach((e) => {
       e.disabled = false;
     });
   }
-  checkboxes.forEach(e => {
-    e.addEventListener('change', () => {
+  checkboxes.forEach((e) => {
+    e.addEventListener("change", () => {
       toggleAutotranslateButton();
     });
   });
@@ -138,9 +139,10 @@ export const init = (config) => {
    * @param {Integer} id Translation ID
    */
   const getTranslation = (id) => {
-
     // Get the editor
-    let editor = document.querySelector('.multilingual-editor[data-id="' + id + '"]');
+    let editor = document.querySelector(
+      '.multilingual-editor[data-id="' + id + '"]'
+    );
 
     // Get the source text
     let sourceText = document.querySelector(
@@ -188,10 +190,12 @@ export const init = (config) => {
    * @returns void
    */
   autotranslateButton.addEventListener("click", () => {
-    document.querySelectorAll(".filter-multilingual_select:checked").forEach(e => {
-      let id = e.getAttribute('data-id');
-      getTranslation(id);
-    });
+    document
+      .querySelectorAll(".filter-multilingual_select:checked")
+      .forEach((e) => {
+        let id = e.getAttribute("data-id");
+        getTranslation(id);
+      });
   });
 
   /**
@@ -280,48 +284,53 @@ export const init = (config) => {
   /**
    * Add Editor to .multilingual editor
    */
-  const htmlEditor = document.querySelectorAll(".multilingual-editor.format-html");
-  // htmlEditor.forEach(editor => {
-  //   let html = stringeditor.stringToHTML(editor.innerHTML);
-  //   let nodes = stringeditor.parseNodes(html);
-  //   let output = stringeditor.outputEditor(nodes);
-
-  //   editor.classList.add('d-none');
-  //   editor.after(output);
-  // });
+  const htmlEditor = document.querySelectorAll(
+    ".multilingual-editor.format-html"
+  );
   htmlEditor.forEach(editor => {
-      let id = editor.getAttribute("data-id");
+    let textarea = document.createElement('textarea');
+    let textareaClasses = ['multilingual-editor', 'd-none'];
+    textarea.classList.add(...textareaClasses);
+    textarea.setAttribute('data-id', editor.getAttribute('data-id'));
+    textarea.innerHTML = editor.innerHTML.trim();
 
-      let controls =
-        '<div class="filter-multilingual__editor-tools" data-id="' +
-        id +
-        '">' +
-        '<div class="btn-toolbar" role="toolbar" aria-label="Editor Toolbar">' +
-        '<div class="btn-group mr-2" role="group" aria-label="Formatting">' +
-        '<button data-method="h2" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h2"></i></button>' +
-        '<button data-method="h3" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h3"></i></button>' +
-        '<button data-method="p" type="button" class="t-editor-button btn btn-light"><i class="bi-paragraph"></i></button>' +
-        "</div>" +
-        '<div class="btn-group mr-2" role="group" aria-label="Lists">' +
-        '<button data-method="ol" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ol"></i></button>' +
-        '<button data-method="ul" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ul"></i></button>' +
-        "</div>" +
-        '<div class="btn-group mr-2" role="group" aria-label="Styles">' +
-        '<button data-method="b" type="button" class="t-editor-button btn btn-light"><i class="bi-type-bold"></i></button>' +
-        '<button data-method="i" type="button" class="t-editor-button btn btn-light"><i class="bi-type-italic"></i></button>' +
-        '<button data-method="u" type="button" class="t-editor-button btn btn-light"><i class="bi-type-underline"></i></button>' +
-        "</div>" +
-        '<div class="btn-group mr-2" role="group" aria-label="Links">' +
-        '<button data-method="l" type="button" class="t-editor-button btn btn-light"><i class="bi-link-45deg"></i></button>' +
-        "</div>" +
-        // '<div class="btn-group mr-2" role="group" aria-label="Links">' +
-        // '<button data-method="html" type="button" class="t-editor-button btn btn-light"><i class="bi-code-slash"></i></button>' +
-        // "</div>" +
-        "</div>" +
-        "</div>";
+    editor.after(textarea);
+  });
+  htmlEditor.forEach(editor => {
+    let id = editor.getAttribute("data-id");
 
-      editor.parentNode.prepend(...stringToHTML(controls));
-    });
+    let controls =
+      '<div class="filter-multilingual__editor-tools" data-id="' +
+      id +
+      '">' +
+      '<div class="btn-toolbar" role="toolbar" aria-label="Editor Toolbar">' +
+      '<div class="btn-group mr-2" role="group" aria-label="Formatting">' +
+      '<button data-method="h2" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h2"></i></button>' +
+      '<button data-method="h3" type="button" class="t-editor-button btn btn-light"><i class="bi-type-h3"></i></button>' +
+      '<button data-method="p" type="button" class="t-editor-button btn btn-light"><i class="bi-paragraph"></i></button>' +
+      "</div>" +
+      '<div class="btn-group mr-2" role="group" aria-label="Lists">' +
+      '<button data-method="ol" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ol"></i></button>' +
+      '<button data-method="ul" type="button" class="t-editor-button btn btn-light"><i class="bi-list-ul"></i></button>' +
+      "</div>" +
+      '<div class="btn-group mr-2" role="group" aria-label="Styles">' +
+      '<button data-method="b" type="button" class="t-editor-button btn btn-light"><i class="bi-type-bold"></i></button>' +
+      '<button data-method="i" type="button" class="t-editor-button btn btn-light"><i class="bi-type-italic"></i></button>' +
+      '<button data-method="u" type="button" class="t-editor-button btn btn-light"><i class="bi-type-underline"></i></button>' +
+      "</div>" +
+      '<div class="btn-group mr-2" role="group" aria-label="Links">' +
+      '<button data-method="l" type="button" class="t-editor-button btn btn-light"><i class="bi-link-45deg"></i></button>' +
+      "</div>" +
+      '<div class="btn-group mr-2 d-none" role="group" aria-label="HTML">' +
+      '<button data-method="html" data-active="false" type="button" class="t-editor-button btn btn-light">' +
+      '<i class="bi-code-slash"></i>' +
+      "</button>" +
+      "</div>" +
+      "</div>" +
+      "</div>";
+
+    editor.parentNode.prepend(...stringToHTML(controls));
+  });
 
   /**
    * Switch Translation Language
@@ -341,10 +350,23 @@ export const init = (config) => {
    */
   document.querySelectorAll(".t-editor-button").forEach((button) => {
     button.addEventListener("click", () => {
-      // @todo let id = button.closest('.filter-multilingual__editor-tools').getAttribute('data-id');
+      let id = button
+        .closest(".filter-multilingual__editor-tools")
+        .getAttribute("data-id");
       let method = button.getAttribute("data-method");
-      // @todo let editor = document.querySelector('.multilingual-editor[data-id="' + id + '"]');
-      // @todo let html = editor.innerHTML;
+      let editor = document.querySelector('div.multilingual-editor[data-id="' + id + '"]');
+      let htmlEditor = document.querySelector('textarea.multilingual-editor[data-id="' + id + '"]');
+      let buttons = document.querySelectorAll(
+        '.filter-multilingual__editor-tools[data-id="' +
+          id +
+          '"] button:not([data-method="html"])'
+      );
+      let htmlButton = document.querySelector(
+        '.filter-multilingual__editor-tools[data-id="' +
+          id +
+          '"] button[data-method="html"]'
+      );
+      let active = htmlButton.getAttribute("data-active");
 
       switch (method) {
         case "h2":
@@ -375,9 +397,27 @@ export const init = (config) => {
           var link = prompt("Enter a URL:", "https://");
           document.execCommand("createLink", false, link);
           break;
+        case "html":
+          if (active === "false") {
+            htmlButton.setAttribute("data-active", "true");
+            buttons.forEach((button) => {
+              button.disabled = true;
+            });
+            editor.classList.add('d-none');
+            htmlEditor.classList.remove('d-none');
+          } else {
+            htmlButton.setAttribute("data-active", "false");
+            buttons.forEach((button) => {
+              button.disabled = false;
+            });
+            editor.classList.remove('d-none');
+            htmlEditor.classList.add('d-none');
+          }
+          break;
         default:
           break;
       }
     });
   });
+
 };
