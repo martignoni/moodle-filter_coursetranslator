@@ -20,6 +20,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
+use filter_multilingual\output\translate_form;
 
 /**
  * Translate Page Output
@@ -43,6 +44,16 @@ class translate_page implements renderable, templatable {
         $this->course = $course;
         $this->langs = get_string_manager()->get_list_of_translations();
         $this->current_lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
+
+        // Moodle Form.
+        $mform = new translate_form(null, [
+            'multilinguals' => $multilinguals,
+            'course' => $course,
+            // 'lang' => $lang
+        ]);
+
+        $this->mform = $mform;
+
     }
 
     /**
@@ -80,6 +91,13 @@ class translate_page implements renderable, templatable {
         $data->langs = $langs;
         $data->lang = $this->langs[$this->current_lang];
         $data->wordcount = $wordcount;
+
+        // Hacky fix but the only way to adjust html...
+        // This could be overridden in css and I might look at that fix for the future.
+        $renderedform = $this->mform->render();
+        $renderedform = str_replace('col-md-3 col-form-label d-flex pb-0 pr-md-0', 'd-none', $renderedform);
+        $renderedform = str_replace('class="col-md-9 form-inline align-items-start felement"', '', $renderedform);
+        $data->mform = $renderedform;
 
         return $data;
     }

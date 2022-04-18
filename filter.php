@@ -108,13 +108,13 @@ class filter_multilingual extends moodle_text_filter {
             $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'id', 0, 1);
             $id = reset($records)->id;
 
-            if (!isset($SESSION->filter_fulltranslate)) {
-                $SESSION->filter_fulltranslate = new stdClass();
-                $SESSION->filter_fulltranslate->strings = [];
+            if (!isset($SESSION->filter_multilingual)) {
+                $SESSION->filter_multilingual = new stdClass();
+                $SESSION->filter_multilingual->strings = [];
             } else {
-                $SESSION->filter_fulltranslate->strings[$id] = $translatedtext;
+                $SESSION->filter_multilingual->strings[$id] = $translatedtext;
             }
-            $translatedtext .= '<a data-recordid="' . $id . '"'
+            $translatedtext .= '<div><a data-recordid="' . $id . '"'
                 . 'href="' . $CFG->wwwroot . '/filter/multilingual/translate.php'
                 . '?&course_id=' . $COURSE->id
                 . '&course_lang=' . current_language()
@@ -122,7 +122,7 @@ class filter_multilingual extends moodle_text_filter {
                 . '">'
                 . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i> '
                 . get_string('edittranslation', 'filter_multilingual')
-                . '</a>';
+                . '</a></div>';
         }
 
         // Return the translated text for display.

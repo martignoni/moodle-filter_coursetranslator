@@ -17,26 +17,13 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 <div class="multilingual-content">
   <div class="container-fluid">
     <div class="row">
-      <form class="col-4 px-0">
-        <div class="form-group">
-          <label for="select-target-language"
-            >{{#str}}t_select_target_language,filter_multilingual{{/str}}</label
-          >
-          <select
-            name="select-target-language"
-            class="multilingual-locale-switcher form-control"
-          >
-            {{#langs}}
-            <option value="{{ code }}" {{selected}}>{{ lang }}</option>
-            {{/langs}}
-          </select>
-        </div>
-      </form>
-      <div class="col-4"></div>
-      <div class="col-4 px-0">
-        <p class="text-right">
+      <div class="col-4">
+        <p>
           {{#str}}t_word_count,filter_multilingual, {{ wordcount }}{{/str}}
         </p>
+      </div>
+      <div class="col-4"></div>
+      <div class="col-4 px-0">
         <div class="text-right">
           <button
             type="button"
@@ -76,39 +63,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
       </div>
     </li>
 
-    {{#multilinguals}}
-    <li class="row align-items-start border-bottom py-3">
-      <div class="col-1">
-        <div class="form-check">
-          <input
-            class="form-check-input filter-multilingual_select"
-            type="checkbox"
-            data-id="{{id}}"
-            disabled
-          />
-          <label class="form-check-label d-none" for="defaultCheck1">
-            {{ id }}
-          </label>
-        </div>
-      </div>
-      <div class="col-1">{{ id }}</div>
-      <div
-        class="col-5 px-0 pr-5 filter-multilingual__source-text"
-        data-id="{{ id }}"
-      >
-        {{{sourcetext}}}
-      </div>
-      <div class="col-5 px-0 filter-multilingual__translation">
-        <div
-          class="format-{{ textformat }} multilingual-editor border py-2 px-3"
-          contenteditable="true"
-          data-id="{{ id }}"
-          data-format="{{ textformat }}"
-        >
-          {{{translation}}}
-        </div>
-      </div>
-    </li>
-    {{/multilinguals}}
+    {{{mform}}}
   </ul>
 </div>

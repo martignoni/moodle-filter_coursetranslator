@@ -24,14 +24,37 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     max-width: 100%;
 }
 
+/* scroll window */
+.filter-multilingual__scroll {
+    overflow: scroll;
+    height: 361px;
+    padding-top: 58px;
+}
+
+.filter-multilingual__scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.filter-multilingual__scroll::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
 /* editor tweaks */
-.filter-multilingual__translation .multilingual-editor {
+.filter-multilingual__translation .multilingual-editor,
+.filter-multilingual__translation .editor_atto_content {
     resize: both;
     overflow: auto;
 }
 .filter-multilingual__translation textarea.multilingual-editor {
     width: 100%;
     min-height: 300px;
+}
+.filter-multilingual__translation .form-group.row {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 /* content */
