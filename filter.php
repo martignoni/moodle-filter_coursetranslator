@@ -84,7 +84,7 @@ class filter_multilingual extends moodle_text_filter {
      * @return void
      */
     public function get_translation($text, $language, $format) {
-        global $DB, $CFG, $SESSION;
+        global $DB, $CFG, $COURSE, $SESSION;
 
         // Generate hashkey.
         $hashkey = sha1(trim($text));
@@ -100,6 +100,29 @@ class filter_multilingual extends moodle_text_filter {
             $DB->set_field(self::TABLENAME, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
         } else {
             $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format);
+        }
+
+        // Add edit link to translation.
+        if (empty(WS_SERVER) && has_capability('filter/multilingual:edittranslations', $this->context)) {
+
+            $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'id', 0, 1);
+            $id = reset($records)->id;
+
+            if (!isset($SESSION->filter_fulltranslate)) {
+                $SESSION->filter_fulltranslate = new stdClass();
+                $SESSION->filter_fulltranslate->strings = [];
+            } else {
+                $SESSION->filter_fulltranslate->strings[$id] = $translatedtext;
+            }
+            $translatedtext .= '<a data-recordid="' . $id . '"'
+                . 'href="' . $CFG->wwwroot . '/filter/multilingual/translate.php'
+                . '?&course_id=' . $COURSE->id
+                . '&course_lang=' . current_language()
+                . '&text_id=' . $id
+                . '">'
+                . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i> '
+                . get_string('edittranslation', 'filter_multilingual')
+                . '</a>';
         }
 
         // Return the translated text for display.

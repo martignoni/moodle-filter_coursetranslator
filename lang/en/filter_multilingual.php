@@ -30,6 +30,7 @@ $string['pluginname'] = 'Multilingual Content';
 $string['filtername'] = 'Multilingual Content';
 $string['translate_page_title'] = 'Translate Content';
 $string['multilingual:edittranslations'] = 'Edit Translations';
+$string['edittranslation'] = 'Edit Translation';
 
 // DeepL strings.
 $string['apikey'] = 'API Key for DeepL Translate';
@@ -51,3 +52,6 @@ $string['t_source_text'] = 'Source Text';
 $string['t_translation'] = 'Translation: {$a}';
 $string['t_autosaved'] = 'Autosaved';
 $string['t_selectall'] = 'Select All';
+
+// Glossary strings.
+$string['g_page_title'] = 'Multilingual Glossary';

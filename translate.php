@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Multilingual
+ * Filter Multilingual Translate Page
  *
  * @package    filter_multilingual
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
@@ -30,8 +30,15 @@ require_once('./classes/output/translate_page.php');
 // Needed vars for processing.
 $courseid = required_param('course_id', PARAM_INT);
 $lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
+$textid = optional_param('text_id', null, PARAM_INT);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-$multilinguals = $DB->get_records('filter_multilingual', array('course_id' => $courseid, 'lang' => $lang));
+
+// Get multilingual records.
+if (!is_null($textid)) {
+    $multilinguals = $DB->get_records('filter_multilingual', array('course_id' => $courseid, 'lang' => $lang, 'id' => $textid));
+} else {
+    $multilinguals = $DB->get_records('filter_multilingual', array('course_id' => $courseid, 'lang' => $lang));
+}
 
 // Setup page.
 $context = context_course::instance($courseid);
