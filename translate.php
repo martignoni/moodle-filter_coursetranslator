@@ -58,7 +58,7 @@ $jsconfig->current_lang = current_language();
 $jsconfig->course_id = $courseid;
 
 // Set initial page layout.
-$title = get_string('translate_page_title', 'filter_coursetranslator');
+$title = get_string('pluginname', 'filter_coursetranslator');
 $PAGE->set_url('/filter/coursetranslator/translate.php', array('course_id' => $courseid));
 $PAGE->set_title($title);
 $PAGE->set_heading($title);

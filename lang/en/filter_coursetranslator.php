@@ -26,9 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 // General strings.
-$string['pluginname'] = 'Course Translator Content';
-$string['filtername'] = 'Course Translator Content';
-$string['translate_page_title'] = 'Translate Content';
+$string['pluginname'] = 'Course Translator';
+$string['filtername'] = 'Course Translator';
 $string['coursetranslator:edittranslations'] = 'Edit Translations';
 $string['edittranslation'] = 'Edit Translation';
 

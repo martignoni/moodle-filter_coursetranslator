@@ -30,7 +30,7 @@ function filter_coursetranslator_extend_navigation_course($navigation, $course) 
     $url = new moodle_url("/filter/coursetranslator/translate.php?course_id=$course->id&course_lang=$lang");
 
     // Get title of translate page for navigation menu.
-    $title = get_string('translate_page_title', 'filter_coursetranslator');
+    $title = get_string('pluginname', 'filter_coursetranslator');
 
     // Navigation node.
     $translatecontent = navigation_node::create(
