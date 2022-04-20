@@ -35,19 +35,6 @@ export const init = (config) => {
   });
 
   /**
-   * Switch Translation Language
-   */
-  let localeSwitcher = document.querySelector(".filter-coursetranslator__localeswitcher");
-  localeSwitcher.addEventListener("change", (e) => {
-    let url = new URL(window.location.href);
-    let searchParams = url.searchParams;
-    searchParams.set("course_lang", e.target.value);
-    let newUrl = url.toString();
-
-    window.location = newUrl;
-  });
-
-  /**
    * Convert a template string into HTML DOM nodes
    * @param  {String} string The template string
    * @return {Node}       The template HTML
@@ -81,22 +68,19 @@ export const init = (config) => {
   };
 
   /**
-   * Toggle Autotranslate Button
+   * Switch Translation Language
    */
-  const toggleAutotranslateButton = () => {
-    let checkboxItems = [];
-    checkboxes.forEach((e) => {
-      checkboxItems.push(e.checked);
-    });
-    let checked = checkboxItems.find((checked) => checked === true)
-      ? true
-      : false;
-    if (config.autotranslate && checked) {
-      autotranslateButton.disabled = false;
-    } else {
-      autotranslateButton.disabled = true;
-    }
-  };
+  let localeSwitcher = document.querySelector(
+    ".filter-coursetranslator__localeswitcher"
+  );
+  localeSwitcher.addEventListener("change", (e) => {
+    let url = new URL(window.location.href);
+    let searchParams = url.searchParams;
+    searchParams.set("course_lang", e.target.value);
+    let newUrl = url.toString();
+
+    window.location = newUrl;
+  });
 
   /**
    * Select All Checkbox
@@ -153,12 +137,30 @@ export const init = (config) => {
   );
 
   /**
+   * Toggle Autotranslate Button
+   */
+  const toggleAutotranslateButton = () => {
+    let checkboxItems = [];
+    checkboxes.forEach((e) => {
+      checkboxItems.push(e.checked);
+    });
+    let checked = checkboxItems.find((checked) => checked === true)
+      ? true
+      : false;
+    if (config.autotranslate && checked) {
+      autotranslateButton.disabled = false;
+    } else {
+      autotranslateButton.disabled = true;
+    }
+  };
+
+  /**
    * Autotranslate Button Click
    * @returns void
    */
   autotranslateButton.addEventListener("click", () => {
     document
-      .querySelectorAll(".filter-coursetranslator__select:checked")
+      .querySelectorAll(".filter-coursetranslator__checkbox:checked")
       .forEach((e) => {
         let id = e.getAttribute("data-id");
         getTranslation(id);
@@ -172,12 +174,12 @@ export const init = (config) => {
   const getTranslation = (id) => {
     // Get the editor
     let editor = document.querySelector(
-      '.filter-coursetranslator__editor[data-id="' + id + '"]'
+      '.filter-coursetranslator__editor[data-id="' + id + '"] [contenteditable="true"]'
     );
 
     // Get the source text
     let sourceText = document.querySelector(
-      '.filter-coursetranslator__source-text[data-id="' + id + '"]'
+      '[data-sourcetext-id="' + id + '"]'
     ).innerHTML;
 
     // Build formData
@@ -223,6 +225,7 @@ export const init = (config) => {
    * @param  {Node} editor HTML Editor Node
    */
   const saveTranslation = (id, translation, editor) => {
+
     // Success Message
     const successMessage = () => {
       editor.classList.add("filter-coursetranslator__success");
@@ -234,6 +237,7 @@ export const init = (config) => {
         autsavedMsg +
         "</div>";
       editor.after(...stringToHTML(indicator));
+
       // Remove success message after a few seconds
       setTimeout(() => {
         let indicatorNode = document.querySelector(

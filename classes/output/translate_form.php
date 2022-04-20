@@ -73,9 +73,9 @@ class translate_form extends moodleform {
                     data-id="' . $item->id . '"
                 >');
                 if ($item->textformat === 'plain') {
-                    $mform->addElement('html', '<div>' . $item->sourcetext . '</div>');
+                    $mform->addElement('html', '<div data-sourcetext-id="' . $item->id . '">' . $item->sourcetext . '</div>');
                 } else {
-                    $mform->addElement('html', '<div class="filter-coursetranslator__scroll">' . $item->sourcetext . '</div>');
+                    $mform->addElement('html', '<div data-sourcetext-id="' . $item->id . '" class="filter-coursetranslator__scroll">' . $item->sourcetext . '</div>');
                 }
                 $mform->addElement('html', '</div>');
 
