@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMLDB PATH="filter/coursetranslator/db" VERSION="20200506" COMMENT="XMLDB file for Moodle filter/coursetranslator" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+<XMLDB PATH="filter/coursetranslator/db" VERSION="20220420" COMMENT="XMLDB file for Moodle filter/coursetranslator" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
     <TABLE NAME="filter_coursetranslator" COMMENT="Default comment for filter_coursetranslator, please edit me">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
         <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="hashkey" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="mod_name" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="mod_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="sourcetext" TYPE="text" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="textformat" TYPE="char" LENGTH="50" NOTNULL="true" SEQUENCE="false" />
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" />
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" />
-        <FIELD NAME="lastaccess" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="lang" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="sourcelang" TYPE="char" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="url" TYPE="text" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="automatic" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="translation" TYPE="text" NOTNULL="true" SEQUENCE="false" />
-        <FIELD NAME="hidefromtable" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" />
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="11" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" />
+        <FIELD NAME="lastaccess" TYPE="int" LENGTH="11" NOTNULL="false" SEQUENCE="false" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" />

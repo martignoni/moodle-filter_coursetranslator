@@ -49,7 +49,6 @@ class translate_page implements renderable, templatable {
         $mform = new translate_form(null, [
             'coursetranslators' => $coursetranslators,
             'course' => $course,
-            // 'lang' => $lang
         ]);
 
         $this->mform = $mform;

@@ -25,13 +25,18 @@
  */
 class filter_coursetranslator extends moodle_text_filter {
 
-    // Database table name.
-    const TABLENAME = 'filter_coursetranslator';
-
-
+    /**
+     * Course Translator Construct
+     *
+     * @param context $context
+     * @param array $localconfig
+     */
     public function __construct($context, array $localconfig) {
+        global $COURSE;
         parent::__construct($context, $localconfig);
         $this->localconfig = $localconfig;
+        $this->course = $COURSE;
+        $this->tablename = 'filter_coursetranslator';
 
         switch($context->contextlevel) {
             case CONTEXT_SYSTEM:
@@ -68,7 +73,12 @@ class filter_coursetranslator extends moodle_text_filter {
         $this->options = $options;
 
         // No need to translate empty or numeric text.
-        if (empty($text) || is_numeric($text) || $this->filterctx === false) {
+        if (
+            empty($text)
+            || is_numeric($text)
+            || $this->filterctx === false
+            || $text === 'Moodle'
+        ) {
             return $text;
         }
 
@@ -93,6 +103,37 @@ class filter_coursetranslator extends moodle_text_filter {
     }
 
     /**
+     * Get Translation Edit Link
+     *
+     * @param object $instance
+     * @return void
+     */
+    private function get_translate_link($instance) {
+        $translateurl = new moodle_url('/filter/coursetranslator/translate.php', array(
+            'course_id' => $this->course->id,
+            'course_lang' => current_language(),
+            'mod_id' => $instance->id
+        ));
+        $instance->set_after_edit_icons(
+            '<a href="' . $translateurl . '" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i></a>
+        ');
+    }
+
+    /**
+     * Get $modconfig
+     *
+     * @param int $id
+     * @param string $name
+     * @return array
+     */
+    private function get_modconfig($id, $name) {
+        return array(
+            'mod_id' => $id,
+            'mod_name' => $name
+        );
+    }
+
+    /**
      * Get Translation
      *
      * @param string $text
@@ -101,60 +142,67 @@ class filter_coursetranslator extends moodle_text_filter {
      * @return void
      */
     public function get_translation($text, $language, $format) {
-        global $DB, $CFG, $PAGE, $COURSE, $SESSION;
+        global $DB, $CFG, $PAGE, $SESSION;
 
-        // Get modinfo to avoid database queries
-        $modinfo = get_fast_modinfo($COURSE);
+        // Get modinfo to avoid database queries.
+        $modinfo = get_fast_modinfo($this->course);
 
-        // Added translate url
-        foreach($modinfo->instances as $instances) {
-            foreach($instances as $instance) {
-                $translateurl = new moodle_url('/filter/coursetranslator/translate.php', array(
-                    'course_id' => $COURSE->id,
-                    'course_lang' => current_language()
-                ));
-                $instance->set_after_edit_icons('<a href="' . $translateurl . '"><i class="fa fa-globe" aria-hidden="true"></i></a>');
+        // Added translate url.
+        foreach ($modinfo->instances as $instances) {
+            foreach ($instances as $instance) {
+                $this->get_translate_link($instance);
             }
         };
 
-        // Parse course for uid building
+        // Parse course for uid building.
         switch($text) {
-            // Course related uids
-            case $COURSE->fullname:
+            // Course related uids.
+            case $this->course->fullname:
                 $uid = 'course/fullname/';
+                $modconfig = $this->get_modconfig($this->course->id, 'course');
                 break;
-            case $COURSE->shortname:
+            case $this->course->shortname:
                 $uid = 'course/shortname/';
+                $modconfig = $this->get_modconfig($this->course->id, 'course');
                 break;
-            case $COURSE->summary:
+            case $this->course->summary:
                 $uid = 'course/summary/';
+                $modconfig = $this->get_modconfig($this->course->id, 'course');
                 break;
             default:
                 $uid = null;
                 break;
         }
 
-        // Parse sections for uid building
+        // Parse sections for uid building.
         $sections = $modinfo->get_section_info_all();
         if (isset($sections)) {
             foreach ($sections as $section) {
-                if (isset($section->name) && $section->name === $text) {
-                    $uid = $section->id . '/name/';
-                }
-                if (isset($section->summary) && $section->summary === $text) {
-                    $uid = $section->id . '/summary/';
+                switch($text) {
+                    case $section->name:
+                        $uid = $section->id . '/name/';
+                        $modconfig = $this->get_modconfig($section->id, 'section');
+                        break;
+                    case $section->name:
+                        $uid = $section->id . '/summary/';
+                        $modconfig = $this->get_modconfig($section->id, 'section');
+                        break;
                 }
             }
         }
 
-        // Parse activities for uid building
-        $activities = $modinfo->get_array_of_activities($COURSE);
+        // Parse activities for uid building.
+        $activities = $modinfo->get_array_of_activities($this->course);
         foreach ($activities as $activity) {
-            if (isset($activity->name) && $activity->name === $text) {
-                $uid = $activity->mod . '/name/';
-            }
-            if (isset($activity->content) && $activity->content === $text) {
-                $uid = $activity->mod . '/content/';
+            switch($text) {
+                case $activity->name:
+                    $uid = $activity->mod . '/name/';
+                    $modconfig = $this->get_modconfig($activity->cm, $activity->mod);
+                    break;
+                case $activty->name:
+                    $uid = $activity->mod . '/content/';
+                    $modconfig = $this->get_modconfig($activity->cm, $activity->mod);
+                    break;
             }
             $activityid = optional_param('id', 0, PARAM_INT);
             if (!isset($activity->content) && intval($activityid) === intval($activity->cm)) {
@@ -163,34 +211,38 @@ class filter_coursetranslator extends moodle_text_filter {
                 $record = $DB->get_record($activity->mod, array('id' => $activity->id), $fields);
 
                 if (isset($record->intro) && $text === $record->intro) {
-                    $uid = $activity->mod . '/intro/';
+                    $uid = $record->mod . '/intro/';
+                    $modconfig = $this->get_modconfig($record->cm, $record->mod);
                 }
                 if (isset($record->content) && $text === $record->content) {
-                    $uid = $activity->mod . '/content/';
+                    $uid = $record->mod . '/content/';
+                    $modconfig = $this->get_modconfig($record->cm, $record->mod);
                 }
             }
         }
 
-        // uid check
+        // UID check.
         if (!$uid) {
             return $text;
         }
 
+        print_object($modconfig);
+
         // Generate hashkey.
-        $hashstring = $this->context->path . '/' . $COURSE->id . '/' . $uid;
+        $hashstring = $this->context->path . '/' . $this->course->id . '/' . $uid;
         $hashkey = sha1(trim($hashstring));
 
         // Get records based on hashkey.
-        $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
+        $records = $DB->get_records($this->tablename, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
         if (isset(reset($records)->translation)) {
             $translatedtext = reset($records)->translation;
         }
 
         // Get translation if it exists else generate translation.
         if (isset($translatedtext)) {
-            $DB->set_field(self::TABLENAME, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
+            $DB->set_field($this->tablename, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
         } else {
-            $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format);
+            $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format, $modconfig);
         }
 
         // Return the translated text for display.
@@ -204,39 +256,34 @@ class filter_coursetranslator extends moodle_text_filter {
      * @param string $language
      * @param string $hashkey
      * @param int $format
+     * @param array $modconfig
      * @return void
      */
-    public function generate_translation_update_database($text, $language, $hashkey, $format) {
-        global $DB, $PAGE, $CFG, $COURSE;
+    public function generate_translation_update_database($text, $language, $hashkey, $format, $modconfig) {
+        global $DB, $PAGE, $CFG;
 
         // Processing vars.
-        $courseid = $COURSE->id;
+        $this->courseid = $this->course->id;
         $translation = $this->generate_translation($text, $language);
-
-        if ($translation) {
-            $hidefromtable = 0;
-        } else {
-            $translation = $text;
-            $hidefromtable = 1;
-        }
 
         // Build the translation record.
         $record = (object) [
-            'course_id' => isset($courseid) ? $courseid : 0, // Set to 0 if course_id not found to avoid null errors.
+            'course_id' => isset($this->courseid) ? $this->courseid : 0, // Set to 0 if course_id not found to avoid null errors.
             'hashkey' => $hashkey,
+            'mod_name' => $modconfig['mod_name'],
+            'mod_id' => $modconfig['mod_id'],
             'sourcetext' => $text,
             'textformat' => boolval($format) ? 'html' : 'plain',
-            'timecreated' => time(),
             'lang' => $language,
             'sourcelang' => $CFG->lang,
             'url' => str_replace($CFG->wwwroot, '', $PAGE->url->out()),
             'automatic' => true,
             'translation' => $translation,
-            'hidefromtable' => $hidefromtable
+            'timecreated' => time(),
         ];
 
         // Insert the record into the database.
-        $DB->insert_record(self::TABLENAME, $record);
+        $DB->insert_record($this->tablename, $record);
 
         // Return the translation.
         return $translation;

@@ -32,7 +32,7 @@ $services = array(
         'requiredcapability' => 'filter/coursetranslator:edittranslations',
         'restrictedusers' => 0,
         'enabled' => 1,
-        'shortname' => 'Course Translator',
+        'shortname' => 'CourseTranslator',
         'downloadfiles' => 0,
         'uploadfiles'  => 0
     )

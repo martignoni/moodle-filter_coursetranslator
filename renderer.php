@@ -38,4 +38,5 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
         return parent::render_from_template('filter_coursetranslator/translate_page', $data);
     }
+
 }

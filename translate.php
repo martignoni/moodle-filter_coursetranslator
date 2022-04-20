@@ -31,13 +31,20 @@ require_once('./classes/output/translate_page.php');
 $courseid = required_param('course_id', PARAM_INT);
 $lang = optional_param('course_lang', 'en', PARAM_NOTAGS);
 $textid = optional_param('text_id', null, PARAM_INT);
+$modid = optional_param('mod_id', null, PARAM_INT);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 
 // Get coursetranslator records.
 if (!is_null($textid)) {
-    $coursetranslators = $DB->get_records('filter_coursetranslator', array('course_id' => $courseid, 'lang' => $lang, 'id' => $textid));
+    $coursetranslators = $DB->get_records(
+        'filter_coursetranslator',
+        array('course_id' => $courseid, 'lang' => $lang, 'id' => $textid)
+    );
 } else {
-    $coursetranslators = $DB->get_records('filter_coursetranslator', array('course_id' => $courseid, 'lang' => $lang));
+    $coursetranslators = $DB->get_records(
+        'filter_coursetranslator',
+        array('course_id' => $courseid, 'lang' => $lang)
+    );
 }
 
 // Setup page.
