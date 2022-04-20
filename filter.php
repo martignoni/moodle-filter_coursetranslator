@@ -111,8 +111,8 @@ class filter_coursetranslator extends moodle_text_filter {
     private function get_translate_link($instance) {
         $translateurl = new moodle_url('/filter/coursetranslator/translate.php', array(
             'course_id' => $this->course->id,
+            'mod_id' => $instance->id,
             'course_lang' => current_language(),
-            'mod_id' => $instance->id
         ));
         $instance->set_after_edit_icons(
             '<a href="' . $translateurl . '" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i></a>
@@ -194,29 +194,21 @@ class filter_coursetranslator extends moodle_text_filter {
         // Parse activities for uid building.
         $activities = $modinfo->get_array_of_activities($this->course);
         foreach ($activities as $activity) {
-            switch($text) {
-                case $activity->name:
-                    $uid = $activity->mod . '/name/';
-                    $modconfig = $this->get_modconfig($activity->cm, $activity->mod);
-                    break;
-                case $activty->name:
-                    $uid = $activity->mod . '/content/';
-                    $modconfig = $this->get_modconfig($activity->cm, $activity->mod);
-                    break;
-            }
-            $activityid = optional_param('id', 0, PARAM_INT);
-            if (!isset($activity->content) && intval($activityid) === intval($activity->cm)) {
+            $fields = "*";
+            $record = $DB->get_record($activity->mod, array('id' => $activity->id), $fields);
 
-                $fields = "*";
-                $record = $DB->get_record($activity->mod, array('id' => $activity->id), $fields);
+            // Build values array for processing.
+            $values = array(
+                'name' => $activity->name,
+                'content' => property_exists($record, 'content') ? $record->content : null,
+                'intro' => property_exists($record, 'intro') ? $record->intro : null,
+            );
 
-                if (isset($record->intro) && $text === $record->intro) {
-                    $uid = $record->mod . '/intro/';
-                    $modconfig = $this->get_modconfig($record->cm, $record->mod);
-                }
-                if (isset($record->content) && $text === $record->content) {
-                    $uid = $record->mod . '/content/';
-                    $modconfig = $this->get_modconfig($record->cm, $record->mod);
+            // Loop through values and find the text.
+            foreach ($values as $key => $value) {
+                if ($value === $text) {
+                    $uid = $activity->mod . '/' . $key . '/';
+                    $modconfig = $this->get_modconfig($activity->id, $activity->mod);
                 }
             }
         }
@@ -225,8 +217,6 @@ class filter_coursetranslator extends moodle_text_filter {
         if (!$uid) {
             return $text;
         }
-
-        print_object($modconfig);
 
         // Generate hashkey.
         $hashstring = $this->context->path . '/' . $this->course->id . '/' . $uid;

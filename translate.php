@@ -35,17 +35,21 @@ $modid = optional_param('mod_id', null, PARAM_INT);
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 
 // Get coursetranslator records.
-if (!is_null($textid)) {
-    $coursetranslators = $DB->get_records(
-        'filter_coursetranslator',
-        array('course_id' => $courseid, 'lang' => $lang, 'id' => $textid)
-    );
-} else {
-    $coursetranslators = $DB->get_records(
-        'filter_coursetranslator',
-        array('course_id' => $courseid, 'lang' => $lang)
-    );
+$params = array(
+    'course_id' => $courseid,
+    'lang' => $lang,
+);
+if (isset($modid)) {
+    $params['mod_id'] = $modid;
 }
+if (isset($textid)) {
+    $params['id'] = $textid;
+}
+$coursetranslators = $DB->get_records(
+    'filter_coursetranslator',
+    $params
+);
+
 
 // Setup page.
 $context = context_course::instance($courseid);
