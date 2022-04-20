@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace filter_multilingual\output;
+namespace filter_coursetranslator\output;
 
 use plugin_renderer_base;
 
 /**
- * Filter Multilingual Renderer
+ * Filter Course Translator Renderer
  *
- * @package    filter_multilingual
+ * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Output_API
@@ -36,6 +36,6 @@ class renderer extends plugin_renderer_base {
      */
     public function render_translate_page($page) {
         $data = $page->export_for_template($this);
-        return parent::render_from_template('filter_multilingual/translate_page', $data);
+        return parent::render_from_template('filter_coursetranslator/translate_page', $data);
     }
 }

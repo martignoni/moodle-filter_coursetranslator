@@ -19,64 +19,64 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
 /* responsive iframes */
-.filter-multilingual__source-text iframe,
-.filter-multilingual__translation iframe {
+.filter-coursetranslator__source-text iframe,
+.filter-coursetranslator__translation iframe {
     max-width: 100%;
 }
 
 /* scroll window */
-.filter-multilingual__scroll {
+.filter-coursetranslator__scroll {
     overflow: scroll;
     height: 375px;
     padding-top: 58px;
 }
 
-.filter-multilingual__scroll::-webkit-scrollbar {
+.filter-coursetranslator__scroll::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
 }
 
-.filter-multilingual__scroll::-webkit-scrollbar-thumb {
+.filter-coursetranslator__scroll::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 /* editor tweaks */
-.filter-multilingual__translation .multilingual-editor,
-.filter-multilingual__translation .editor_atto_content {
+.filter-coursetranslator__translation .coursetranslator-editor,
+.filter-coursetranslator__translation .editor_atto_content {
     resize: both;
     overflow: auto;
 }
-.filter-multilingual__translation textarea.multilingual-editor {
+.filter-coursetranslator__translation textarea.coursetranslator-editor {
     width: 100%;
     min-height: 300px;
 }
-.filter-multilingual__translation .form-group.row {
+.filter-coursetranslator__translation .form-group.row {
     margin-left: 0;
     margin-right: 0;
 }
 
 /* content */
 /* stylelint-disable declaration-no-important  */
-.multilingual-content ul li:last-child {
+.coursetranslator-content ul li:last-child {
     border-bottom: 0 !important;
 }
 /* stylelint-enable */
 
 /* editor tools */
-.filter-multilingual__editor-tools {
+.filter-coursetranslator__editor-tools {
     margin-bottom: 0.5rem;
 }
 
 /* ui notices */
-.filter-multilingual__error {
+.filter-coursetranslator__error {
     background: #facbcb;
 }
-.filter-multilingual__success {
+.filter-coursetranslator__success {
     background: #e3fadc;
 }
-.filter-multilingual__success-message {
+.filter-coursetranslator__success-message {
     background: #b4fa9f;
     font-size: 0.6rem;
     text-transform: uppercase;

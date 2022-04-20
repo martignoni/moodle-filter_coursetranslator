@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Multilingual Settings Page
+ * Filter Course Translator Settings Page
  *
- * @package    filter_multilingual
+ * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Admin_settings
@@ -30,36 +30,36 @@ if ($ADMIN->fulltree) {
     // Use deepl machine translation.
     $settings->add(
         new admin_setting_configcheckbox(
-            'filter_multilingual/usedeepl',
-            get_string('usedeepl', 'filter_multilingual'
+            'filter_coursetranslator/usedeepl',
+            get_string('usedeepl', 'filter_coursetranslator'
         ),
-        get_string('usedeepl_desc', 'filter_multilingual'), false));
+        get_string('usedeepl_desc', 'filter_coursetranslator'), false));
 
     // DeepL apikey.
     $settings->add(
         new admin_setting_configtext(
-            'filter_multilingual/apikey',
-            get_string('apikey', 'filter_multilingual'
+            'filter_coursetranslator/apikey',
+            get_string('apikey', 'filter_coursetranslator'
         ),
-        get_string('apikey_desc', 'filter_multilingual'), null, PARAM_RAW_TRIMMED, 40)
+        get_string('apikey_desc', 'filter_coursetranslator'), null, PARAM_RAW_TRIMMED, 40)
     );
 
     // Use ondemand autotranslation.
     $settings->add(
         new admin_setting_configcheckbox(
-            'filter_multilingual/ondemand_autotranslate',
-            get_string('ondemand_autotranslate', 'filter_multilingual'
+            'filter_coursetranslator/ondemand_autotranslate',
+            get_string('ondemand_autotranslate', 'filter_coursetranslator'
         ),
-        get_string('ondemand_autotranslate_desc', 'filter_multilingual'), false)
+        get_string('ondemand_autotranslate_desc', 'filter_coursetranslator'), false)
     );
 
     // Use translation page autotranslation.
     $settings->add(
         new admin_setting_configcheckbox(
-            'filter_multilingual/useautotranslate',
-            get_string('useautotranslate', 'filter_multilingual'
+            'filter_coursetranslator/useautotranslate',
+            get_string('useautotranslate', 'filter_coursetranslator'
         ),
-        get_string('useautotranslate_desc', 'filter_multilingual'), false)
+        get_string('useautotranslate_desc', 'filter_coursetranslator'), false)
     );
 
 }

@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * @module     filter_multilingual/multilingual
+ * @module     filter_coursetranslator/coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +30,7 @@ import * as str from "core/str";
 export const init = (config) => {
   // Autosave Translation String
   let autsavedMsg = "";
-  str.get_string("t_autosaved", "filter_multilingual").done((string) => {
+  str.get_string("t_autosaved", "filter_coursetranslator").done((string) => {
     autsavedMsg = string;
   });
 
@@ -89,14 +89,14 @@ export const init = (config) => {
   /**
    * Select All Checkbox
    */
-  const selectAll = document.querySelector(".filter-multilingual_select-all");
+  const selectAll = document.querySelector(".filter-coursetranslator_select-all");
   if (config.autotranslate) {
     selectAll.disabled = false;
   }
   selectAll.addEventListener("click", (e) => {
     // See if select all is checked
     let checked = e.target.checked;
-    let checkboxes = document.querySelectorAll(".filter-multilingual_select");
+    let checkboxes = document.querySelectorAll(".filter-coursetranslator_select");
 
     // Check/uncheck checkboxes
     if (checked) {
@@ -114,7 +114,7 @@ export const init = (config) => {
   /**
    * Autotranslate Checkboxes
    */
-  const checkboxes = document.querySelectorAll(".filter-multilingual_select");
+  const checkboxes = document.querySelectorAll(".filter-coursetranslator_select");
   if (config.autotranslate) {
     checkboxes.forEach((e) => {
       e.disabled = false;
@@ -131,7 +131,7 @@ export const init = (config) => {
    * @returns void
    */
   const autotranslateButton = document.querySelector(
-    ".multilingual-autotranslate"
+    ".coursetranslator-autotranslate"
   );
 
   /**
@@ -140,7 +140,7 @@ export const init = (config) => {
    */
      autotranslateButton.addEventListener("click", () => {
       document
-        .querySelectorAll(".filter-multilingual_select:checked")
+        .querySelectorAll(".filter-coursetranslator_select:checked")
         .forEach((e) => {
           let id = e.getAttribute("data-id");
           getTranslation(id);
@@ -154,12 +154,12 @@ export const init = (config) => {
   const getTranslation = (id) => {
     // Get the editor
     let editor = document.querySelector(
-      '.multilingual-editor[data-id="' + id + '"]'
+      '.coursetranslator-editor[data-id="' + id + '"]'
     );
 
     // Get the source text
     let sourceText = document.querySelector(
-      '.filter-multilingual__source-text[data-id="' + id + '"]'
+      '.filter-coursetranslator__source-text[data-id="' + id + '"]'
     ).innerHTML;
 
     // Build formData
@@ -208,10 +208,10 @@ export const init = (config) => {
 
     // Success Message
     const successMessage = () => {
-      editor.classList.add("filter-multilingual__success");
+      editor.classList.add("filter-coursetranslator__success");
       // Add saved indicator
       let indicator =
-        '<div class="filter-multilingual__success-message" data-id="' +
+        '<div class="filter-coursetranslator__success-message" data-id="' +
         id +
         '">' +
         autsavedMsg +
@@ -220,7 +220,7 @@ export const init = (config) => {
       // Remove success message after a few seconds
       setTimeout(() => {
         let indicatorNode = document.querySelector(
-          '.filter-multilingual__success-message[data-id="' + id + '"]'
+          '.filter-coursetranslator__success-message[data-id="' + id + '"]'
         );
         editor.parentNode.removeChild(indicatorNode);
       }, 3000);
@@ -228,13 +228,13 @@ export const init = (config) => {
 
     // Error Mesage
     const errorMessage = () => {
-      editor.classList.add("filter-multilingual__error");
+      editor.classList.add("filter-coursetranslator__error");
     };
 
     // Submit the request
     ajax.call([
       {
-        methodname: "filter_multilingual_update_translation",
+        methodname: "filter_coursetranslator_update_translation",
         args: {
           translation: [
             {
@@ -255,7 +255,7 @@ export const init = (config) => {
         fail: (error) => {
           window.console.log("error: ", error);
           errorMessage();
-          editor.classList.addClass("filter-multilingual__error");
+          editor.classList.addClass("filter-coursetranslator__error");
           window.console.log(error);
         },
       },
@@ -266,12 +266,12 @@ export const init = (config) => {
    * Get the Translation using Moodle Web Service
    * @returns void
    */
-  document.querySelectorAll('.multilingual-editor [contenteditable="true"]').forEach((editor) => {
+  document.querySelectorAll('.coursetranslator-editor [contenteditable="true"]').forEach((editor) => {
 
     // Save translation
     editor.addEventListener("focusout", () => {
       let translation = editor.innerHTML;
-      let id = editor.closest('.multilingual-editor').getAttribute('data-id');
+      let id = editor.closest('.coursetranslator-editor').getAttribute('data-id');
       window.console.log(id, translation);
 
       saveTranslation(id, translation, editor);
@@ -279,8 +279,8 @@ export const init = (config) => {
 
     // Remove status classes
     editor.addEventListener("click", () => {
-      editor.classList.remove("filter-multilingual__success");
-      editor.classList.remove("filter-multilingual__error");
+      editor.classList.remove("filter-coursetranslator__success");
+      editor.classList.remove("filter-coursetranslator__error");
     });
   });
 

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Multilingual Filter
+ * Course Translator Filter
  *
  * @package    filter
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
@@ -23,10 +23,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Filters
  */
-class filter_multilingual extends moodle_text_filter {
+class filter_coursetranslator extends moodle_text_filter {
 
     // Database table name.
-    const TABLENAME = 'filter_multilingual';
+    const TABLENAME = 'filter_coursetranslator';
 
 
     public function __construct($context, array $localconfig) {
@@ -109,7 +109,7 @@ class filter_multilingual extends moodle_text_filter {
         // Added translate url
         foreach($modinfo->instances as $instances) {
             foreach($instances as $instance) {
-                $translateurl = new moodle_url('/filter/multilingual/translate.php', array(
+                $translateurl = new moodle_url('/filter/coursetranslator/translate.php', array(
                     'course_id' => $COURSE->id,
                     'course_lang' => current_language()
                 ));
@@ -253,17 +253,17 @@ class filter_multilingual extends moodle_text_filter {
         global $CFG;
 
         // Return existing text if machine translation disabled.
-        if (boolval(get_config('filter_multilingual', 'usedeepl')) === false) {
+        if (boolval(get_config('filter_coursetranslator', 'usedeepl')) === false) {
             return $text;
         }
 
         // Autotranslate not enabled.
-        if (boolval(get_config('filter_multilingual', 'ondemand_autotranslate')) === false) {
+        if (boolval(get_config('filter_coursetranslator', 'ondemand_autotranslate')) === false) {
             return $text;
         }
 
         // Supported languages.
-        $supportedlangsstring = get_string('supported_languages', 'filter_multilingual');
+        $supportedlangsstring = get_string('supported_languages', 'filter_coursetranslator');
         $supportedlanguages = explode(',', $supportedlangsstring);
 
         // Get the language.
@@ -283,7 +283,7 @@ class filter_multilingual extends moodle_text_filter {
             'source_lang' => $CFG->lang,
             'target_lang' => $language,
             'preserve_formatting' => 1,
-            'auth_key' => get_config('filter_multilingual', 'apikey'),
+            'auth_key' => get_config('filter_coursetranslator', 'apikey'),
             'tag_handling' => 'xml',
             'split_sentences' => 'nonewlines'
         ];

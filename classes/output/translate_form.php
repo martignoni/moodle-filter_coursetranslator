@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace filter_multilingual\output;
+namespace filter_coursetranslator\output;
 
 use moodleform;
 
 /**
  * Translate Form Output
  *
- * Provides output class for /filter/multilingual/translate.php
+ * Provides output class for /filter/coursetranslator/translate.php
  *
- * @package    filter_multilingual
+ * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,9 +33,9 @@ class translate_form extends moodleform {
         $mform = $this->_form;
         $mform->disable_form_change_checker();
 
-        if (isset($this->_customdata['multilinguals'])) {
+        if (isset($this->_customdata['coursetranslators'])) {
 
-            foreach ($this->_customdata['multilinguals'] as $item) {
+            foreach ($this->_customdata['coursetranslators'] as $item) {
                 // Open translation item.
                 $mform->addElement('html', '<div class="row align-items-start border-bottom py-3">');
 
@@ -43,7 +43,7 @@ class translate_form extends moodleform {
                 $mform->addElement('html', '<div class="col-1">');
                 $mform->addElement('html', '<div class="form-check">');
                 $mform->addElement('html', '<input
-                    class="form-check-input filter-multilingual_select"
+                    class="form-check-input filter-coursetranslator_select"
                     type="checkbox"
                     data-id="' . $item->id . '"
                     disabled
@@ -57,19 +57,19 @@ class translate_form extends moodleform {
 
                 // Source Text.
                 $mform->addElement('html', '<div
-                    class="col-5 px-0 pr-5 filter-multilingual__source-text"
+                    class="col-5 px-0 pr-5 filter-coursetranslator__source-text"
                     data-id="' . $item->id . '"
                 >');
                 if ($item->textformat === 'plain') {
                     $mform->addElement('html', '<div>' . $item->sourcetext . '</div>');
                 } else {
-                    $mform->addElement('html', '<div class="filter-multilingual__scroll">' . $item->sourcetext . '</div>');
+                    $mform->addElement('html', '<div class="filter-coursetranslator__scroll">' . $item->sourcetext . '</div>');
                 }
                 $mform->addElement('html', '</div>');
 
                 // Translation Input.
                 $mform->addElement('html', '<div
-                    class="col-5 px-0 filter-multilingual__translation multilingual-editor"
+                    class="col-5 px-0 filter-coursetranslator__translation coursetranslator-editor"
                     data-id="' . $item->id . '"
                 >');
 
@@ -101,6 +101,6 @@ class translate_form extends moodleform {
     }
 
     public function require_access() {
-        require_capability('filter/multilingual:edittranslations', \context_system::instance()->id);
+        require_capability('filter/coursetranslator:edittranslations', \context_system::instance()->id);
     }
 }

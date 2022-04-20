@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Full translate
+ * Course Translator
  *
- * @package    filter_multilingual
+ * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/String_API
@@ -26,10 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 // General strings.
-$string['pluginname'] = 'Multilingual Content';
-$string['filtername'] = 'Multilingual Content';
+$string['pluginname'] = 'Course Translator Content';
+$string['filtername'] = 'Course Translator Content';
 $string['translate_page_title'] = 'Translate Content';
-$string['multilingual:edittranslations'] = 'Edit Translations';
+$string['coursetranslator:edittranslations'] = 'Edit Translations';
 $string['edittranslation'] = 'Edit Translation';
 
 // DeepL strings.
@@ -54,4 +54,4 @@ $string['t_autosaved'] = 'Autosaved';
 $string['t_selectall'] = 'Select All';
 
 // Glossary strings.
-$string['g_page_title'] = 'Multilingual Glossary';
+$string['g_page_title'] = 'Course Translator Glossary';

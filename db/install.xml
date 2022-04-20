@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XMLDB PATH="filter/multilingual/db" VERSION="20200506" COMMENT="XMLDB file for Moodle filter/multilingual" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+<XMLDB PATH="filter/coursetranslator/db" VERSION="20200506" COMMENT="XMLDB file for Moodle filter/coursetranslator" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
-    <TABLE NAME="filter_multilingual" COMMENT="Default comment for filter_multilingual, please edit me">
+    <TABLE NAME="filter_coursetranslator" COMMENT="Default comment for filter_coursetranslator, please edit me">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
         <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
