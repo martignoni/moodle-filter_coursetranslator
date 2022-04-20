@@ -15,8 +15,11 @@ You should have received a copy of the GNU General Public License
 along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* import bootstrap icons */
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+/* content */
+.filter-coursetranslator__form .row.border-bottom:last-child {
+    /* stylelint-disable-next-line */
+    border-bottom: 0 !important;
+}
 
 /* responsive iframes */
 .filter-coursetranslator__source-text iframe,
@@ -43,30 +46,17 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* editor tweaks */
-.filter-coursetranslator__translation .coursetranslator-editor,
-.filter-coursetranslator__translation .editor_atto_content {
-    resize: both;
-    overflow: auto;
+.filter-coursetranslator__translation .filter-coursetranslator__editor,
+.filter-coursetranslator__translation [data-fieldtype="editor"] {
+    width: 100%;
 }
-.filter-coursetranslator__translation textarea.coursetranslator-editor {
+.filter-coursetranslator__translation textarea.filter-coursetranslator__editor {
     width: 100%;
     min-height: 300px;
 }
 .filter-coursetranslator__translation .form-group.row {
     margin-left: 0;
     margin-right: 0;
-}
-
-/* content */
-/* stylelint-disable declaration-no-important  */
-.coursetranslator-content ul li:last-child {
-    border-bottom: 0 !important;
-}
-/* stylelint-enable */
-
-/* editor tools */
-.filter-coursetranslator__editor-tools {
-    margin-bottom: 0.5rem;
 }
 
 /* ui notices */

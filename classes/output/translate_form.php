@@ -29,9 +29,21 @@ use moodleform;
  */
 class translate_form extends moodleform {
 
+    /**
+     * Moodle Form Definition
+     *
+     * Our Mustache Renderer recieves this as $mform->render() for output.
+     *
+     * @return void
+     */
     public function definition() {
+
+        // Initialize moodleform.
         $mform = $this->_form;
         $mform->disable_form_change_checker();
+
+        // Open Form.
+        $mform->addElement('html', '<div class="container-fluid filter-coursetranslator__form">');
 
         if (isset($this->_customdata['coursetranslators'])) {
 
@@ -43,7 +55,7 @@ class translate_form extends moodleform {
                 $mform->addElement('html', '<div class="col-1">');
                 $mform->addElement('html', '<div class="form-check">');
                 $mform->addElement('html', '<input
-                    class="form-check-input filter-coursetranslator_select"
+                    class="form-check-input filter-coursetranslator__checkbox"
                     type="checkbox"
                     data-id="' . $item->id . '"
                     disabled
@@ -69,7 +81,7 @@ class translate_form extends moodleform {
 
                 // Translation Input.
                 $mform->addElement('html', '<div
-                    class="col-5 px-0 filter-coursetranslator__translation coursetranslator-editor"
+                    class="col-5 px-0 filter-coursetranslator__translation filter-coursetranslator__editor"
                     data-id="' . $item->id . '"
                 >');
 
@@ -94,12 +106,26 @@ class translate_form extends moodleform {
                 $mform->addElement('html', '</div>');
             }
         }
+
+        // Close form.
+        $mform->addElement('html', '</div>');
     }
 
+    /**
+     * Process Data
+     *
+     * @param \stdClass $data
+     * @return void
+     */
     public function process(\stdClass $data) {
 
     }
 
+    /**
+     * Setup Access Capabilities
+     *
+     * @return void
+     */
     public function require_access() {
         require_capability('filter/coursetranslator:edittranslations', \context_system::instance()->id);
     }

@@ -78,7 +78,6 @@ export const init = (config) => {
     let checked = checkboxItems.find((checked) => checked === true)
       ? true
       : false;
-    window.console.log(checked);
     if (config.autotranslate && checked) {
       autotranslateButton.disabled = false;
     } else {
@@ -89,14 +88,14 @@ export const init = (config) => {
   /**
    * Select All Checkbox
    */
-  const selectAll = document.querySelector(".filter-coursetranslator_select-all");
+  const selectAll = document.querySelector(".filter-coursetranslator__select-all");
   if (config.autotranslate) {
     selectAll.disabled = false;
   }
   selectAll.addEventListener("click", (e) => {
     // See if select all is checked
     let checked = e.target.checked;
-    let checkboxes = document.querySelectorAll(".filter-coursetranslator_select");
+    let checkboxes = document.querySelectorAll(".filter-coursetranslator__checkbox");
 
     // Check/uncheck checkboxes
     if (checked) {
@@ -114,7 +113,7 @@ export const init = (config) => {
   /**
    * Autotranslate Checkboxes
    */
-  const checkboxes = document.querySelectorAll(".filter-coursetranslator_select");
+  const checkboxes = document.querySelectorAll(".filter-coursetranslator__checkbox");
   if (config.autotranslate) {
     checkboxes.forEach((e) => {
       e.disabled = false;
@@ -131,7 +130,7 @@ export const init = (config) => {
    * @returns void
    */
   const autotranslateButton = document.querySelector(
-    ".coursetranslator-autotranslate"
+    ".filter-coursetranslator__autotranslate-btn"
   );
 
   /**
@@ -140,7 +139,7 @@ export const init = (config) => {
    */
      autotranslateButton.addEventListener("click", () => {
       document
-        .querySelectorAll(".filter-coursetranslator_select:checked")
+        .querySelectorAll(".filter-coursetranslator__select:checked")
         .forEach((e) => {
           let id = e.getAttribute("data-id");
           getTranslation(id);
@@ -154,7 +153,7 @@ export const init = (config) => {
   const getTranslation = (id) => {
     // Get the editor
     let editor = document.querySelector(
-      '.coursetranslator-editor[data-id="' + id + '"]'
+      '.filter-coursetranslator__editor[data-id="' + id + '"]'
     );
 
     // Get the source text
@@ -266,12 +265,12 @@ export const init = (config) => {
    * Get the Translation using Moodle Web Service
    * @returns void
    */
-  document.querySelectorAll('.coursetranslator-editor [contenteditable="true"]').forEach((editor) => {
+  document.querySelectorAll('.filter-coursetranslator__editor [contenteditable="true"]').forEach((editor) => {
 
     // Save translation
     editor.addEventListener("focusout", () => {
       let translation = editor.innerHTML;
-      let id = editor.closest('.coursetranslator-editor').getAttribute('data-id');
+      let id = editor.closest('.filter-coursetranslator__editor').getAttribute('data-id');
       window.console.log(id, translation);
 
       saveTranslation(id, translation, editor);

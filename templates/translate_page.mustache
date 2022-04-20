@@ -14,55 +14,53 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div class="coursetranslator-content">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-4 px-0 pt-2">
-        <p>
-          {{#str}}t_word_count,filter_coursetranslator, {{ wordcount }}{{/str}}
-        </p>
-      </div>
-      <div class="col-4"></div>
-      <div class="col-4 px-0 mb-3">
-        <div class="text-right">
-          <button
-            type="button"
-            class="btn btn-primary coursetranslator-autotranslate"
-            disabled
-          >
-            {{#str}}t_autotranslate,filter_coursetranslator{{/str}}
-          </button>
-        </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4 px-0 pt-2">
+      <p>
+        {{#str}}t_word_count,filter_coursetranslator, {{ wordcount }}{{/str}}
+      </p>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4 px-0 mb-3">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-primary filter-coursetranslator__autotranslate-btn"
+          disabled
+        >
+          {{#str}}t_autotranslate,filter_coursetranslator{{/str}}
+        </button>
       </div>
     </div>
   </div>
-
-  <ul class="container-fluid">
-    <li class="row align-items-start border-bottom py-3 bg-primary text-white">
-      <div class="col-1">
-        <div class="form-check">
-          <input
-            class="form-check-input filter-coursetranslator_select-all"
-            type="checkbox"
-            aria-label="{{#str}}t_selectall,filter_coursetranslator{{/str}}"
-            title="{{#str}}t_selectall,filter_coursetranslator{{/str}}"
-            name="select-all"
-            disabled
-          />
-          <label class="form-check-label d-none" for="select-all">
-            {{#str}}t_selectall,filter_coursetranslator{{/str}}
-          </label>
-        </div>
-      </div>
-      <div class="col-1">{{#str}}t_id,filter_coursetranslator{{/str}}</div>
-      <div class="col-5 px-0 pr-5">
-        {{#str}}t_source_text,filter_coursetranslator{{/str}}
-      </div>
-      <div class="col-5 px-0">
-        {{#str}}t_translation,filter_coursetranslator,{{ lang }}{{/str}}
-      </div>
-    </li>
-
-    {{{mform}}}
-  </ul>
 </div>
+
+<div class="container-fluid">
+  <div class="row align-items-start border-bottom py-3 bg-primary text-white">
+    <div class="col-1">
+      <div class="form-check">
+        <input
+          class="form-check-input filter-coursetranslator__select-all"
+          type="checkbox"
+          aria-label="{{#str}}t_selectall,filter_coursetranslator{{/str}}"
+          title="{{#str}}t_selectall,filter_coursetranslator{{/str}}"
+          name="select-all"
+          disabled
+        />
+        <label class="form-check-label d-none" for="select-all">
+          {{#str}}t_selectall,filter_coursetranslator{{/str}}
+        </label>
+      </div>
+    </div>
+    <div class="col-1">{{#str}}t_id,filter_coursetranslator{{/str}}</div>
+    <div class="col-5 px-0 pr-5">
+      {{#str}}t_source_text,filter_coursetranslator{{/str}}
+    </div>
+    <div class="col-5 px-0">
+      {{#str}}t_translation,filter_coursetranslator,{{ lang }}{{/str}}
+    </div>
+  </div>
+</div>
+
+{{{mform}}}
