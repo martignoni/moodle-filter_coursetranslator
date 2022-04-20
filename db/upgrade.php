@@ -86,4 +86,11 @@ function xmldb_filter_multilingual_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022041700, 'filter', 'multilingual');
     }
 
+    // The Solution.
+    if ($oldversion < 2022042000) {
+        // Multilingual savepoint reached.
+        upgrade_plugin_savepoint(true, 2022042000, 'filter', 'multilingual');
+    }
+
+
 }

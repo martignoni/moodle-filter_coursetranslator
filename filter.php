@@ -28,15 +28,29 @@ class filter_multilingual extends moodle_text_filter {
     // Database table name.
     const TABLENAME = 'filter_multilingual';
 
+
     public function __construct($context, array $localconfig) {
         parent::__construct($context, $localconfig);
-        $this->context = $context;
+        $this->localconfig = $localconfig;
 
-        // Test against course context.
-        try {
-            $this->course_context = $context->get_course_context(true);
-        } catch (Exception $e) {
-            $this->course_context = false;
+        switch($context->contextlevel) {
+            case CONTEXT_SYSTEM:
+                $this->filterctx = false;
+                break;
+            case CONTEXT_USER:
+                $this->filterctx = false;
+                break;
+            case CONTEXT_COURSECAT:
+                $this->filterctx = false;
+                break;
+            case CONTEXT_COURSE:
+                $this->filterctx = $context;
+                break;
+            case CONTEXT_MODULE:
+                $this->filterctx = $context;
+                break;
+            default:
+                $this->filterctx = false;
         }
     }
 
@@ -50,16 +64,19 @@ class filter_multilingual extends moodle_text_filter {
     public function filter($text, array $options = []) {
         global $CFG;
 
+        // set options
+        $this->options = $options;
+
         // No need to translate empty or numeric text.
-        if (empty($text) || is_numeric($text) || $this->course_context === false) {
+        if (empty($text) || is_numeric($text) || $this->filterctx === false) {
             return $text;
         }
 
         // Get current language.
         $language = current_language();
-        if ($CFG->lang === $language) {
-            return $text;
-        }
+        // if ($CFG->lang === $language) {
+        //     return $text;
+        // }
 
         // Get the text format. Set Plain Format to 0.
         $format = 0;
@@ -84,10 +101,84 @@ class filter_multilingual extends moodle_text_filter {
      * @return void
      */
     public function get_translation($text, $language, $format) {
-        global $DB, $CFG, $COURSE, $SESSION;
+        global $DB, $CFG, $PAGE, $COURSE, $SESSION;
+
+        // Get modinfo to avoid database queries
+        $modinfo = get_fast_modinfo($COURSE);
+
+        // Added translate url
+        foreach($modinfo->instances as $instances) {
+            foreach($instances as $instance) {
+                $translateurl = new moodle_url('/filter/multilingual/translate.php', array(
+                    'course_id' => $COURSE->id,
+                    'course_lang' => current_language()
+                ));
+                $instance->set_after_edit_icons('<a href="' . $translateurl . '"><i class="fa fa-globe" aria-hidden="true"></i></a>');
+            }
+        };
+
+        // Parse course for uid building
+        switch($text) {
+            // Course related uids
+            case $COURSE->fullname:
+                $uid = 'course/fullname/';
+                break;
+            case $COURSE->shortname:
+                $uid = 'course/shortname/';
+                break;
+            case $COURSE->summary:
+                $uid = 'course/summary/';
+                break;
+            default:
+                $uid = null;
+                break;
+        }
+
+        // Parse sections for uid building
+        $sections = $modinfo->get_section_info_all();
+        if (isset($sections)) {
+            foreach ($sections as $section) {
+                if (isset($section->name) && $section->name === $text) {
+                    $uid = $section->id . '/name/';
+                }
+                if (isset($section->summary) && $section->summary === $text) {
+                    $uid = $section->id . '/summary/';
+                }
+            }
+        }
+
+        // Parse activities for uid building
+        $activities = $modinfo->get_array_of_activities($COURSE);
+        foreach ($activities as $activity) {
+            if (isset($activity->name) && $activity->name === $text) {
+                $uid = $activity->mod . '/name/';
+            }
+            if (isset($activity->content) && $activity->content === $text) {
+                $uid = $activity->mod . '/content/';
+            }
+            $activityid = optional_param('id', 0, PARAM_INT);
+            if (!isset($activity->content) && intval($activityid) === intval($activity->cm)) {
+
+                $fields = "*";
+                $record = $DB->get_record($activity->mod, array('id' => $activity->id), $fields);
+
+                if (isset($record->intro) && $text === $record->intro) {
+                    $uid = $activity->mod . '/intro/';
+                }
+                if (isset($record->content) && $text === $record->content) {
+                    $uid = $activity->mod . '/content/';
+                }
+            }
+        }
+
+        // uid check
+        if (!$uid) {
+            return $text;
+        }
 
         // Generate hashkey.
-        $hashkey = sha1(trim($text));
+        $hashstring = $this->context->path . '/' . $COURSE->id . '/' . $uid;
+        $hashkey = sha1(trim($hashstring));
 
         // Get records based on hashkey.
         $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
@@ -100,29 +191,6 @@ class filter_multilingual extends moodle_text_filter {
             $DB->set_field(self::TABLENAME, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
         } else {
             $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format);
-        }
-
-        // Add edit link to translation.
-        if (empty(WS_SERVER) && has_capability('filter/multilingual:edittranslations', $this->context)) {
-
-            $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'id', 0, 1);
-            $id = reset($records)->id;
-
-            if (!isset($SESSION->filter_multilingual)) {
-                $SESSION->filter_multilingual = new stdClass();
-                $SESSION->filter_multilingual->strings = [];
-            } else {
-                $SESSION->filter_multilingual->strings[$id] = $translatedtext;
-            }
-            $translatedtext .= '<div><a data-recordid="' . $id . '"'
-                . 'href="' . $CFG->wwwroot . '/filter/multilingual/translate.php'
-                . '?&course_id=' . $COURSE->id
-                . '&course_lang=' . current_language()
-                . '&text_id=' . $id
-                . '">'
-                . '<i class="fa fa-pencil-square-o" aria-hidden="true"></i> '
-                . get_string('edittranslation', 'filter_multilingual')
-                . '</a></div>';
         }
 
         // Return the translated text for display.
