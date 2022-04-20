@@ -35,6 +35,19 @@ export const init = (config) => {
   });
 
   /**
+   * Switch Translation Language
+   */
+  let localeSwitcher = document.querySelector(".filter-coursetranslator__localeswitcher");
+  localeSwitcher.addEventListener("change", (e) => {
+    let url = new URL(window.location.href);
+    let searchParams = url.searchParams;
+    searchParams.set("course_lang", e.target.value);
+    let newUrl = url.toString();
+
+    window.location = newUrl;
+  });
+
+  /**
    * Convert a template string into HTML DOM nodes
    * @param  {String} string The template string
    * @return {Node}       The template HTML
@@ -88,14 +101,18 @@ export const init = (config) => {
   /**
    * Select All Checkbox
    */
-  const selectAll = document.querySelector(".filter-coursetranslator__select-all");
+  const selectAll = document.querySelector(
+    ".filter-coursetranslator__select-all"
+  );
   if (config.autotranslate) {
     selectAll.disabled = false;
   }
   selectAll.addEventListener("click", (e) => {
     // See if select all is checked
     let checked = e.target.checked;
-    let checkboxes = document.querySelectorAll(".filter-coursetranslator__checkbox");
+    let checkboxes = document.querySelectorAll(
+      ".filter-coursetranslator__checkbox"
+    );
 
     // Check/uncheck checkboxes
     if (checked) {
@@ -113,7 +130,9 @@ export const init = (config) => {
   /**
    * Autotranslate Checkboxes
    */
-  const checkboxes = document.querySelectorAll(".filter-coursetranslator__checkbox");
+  const checkboxes = document.querySelectorAll(
+    ".filter-coursetranslator__checkbox"
+  );
   if (config.autotranslate) {
     checkboxes.forEach((e) => {
       e.disabled = false;
@@ -137,14 +156,14 @@ export const init = (config) => {
    * Autotranslate Button Click
    * @returns void
    */
-     autotranslateButton.addEventListener("click", () => {
-      document
-        .querySelectorAll(".filter-coursetranslator__select:checked")
-        .forEach((e) => {
-          let id = e.getAttribute("data-id");
-          getTranslation(id);
-        });
-    });
+  autotranslateButton.addEventListener("click", () => {
+    document
+      .querySelectorAll(".filter-coursetranslator__select:checked")
+      .forEach((e) => {
+        let id = e.getAttribute("data-id");
+        getTranslation(id);
+      });
+  });
 
   /**
    * Send for Translation to DeepL
@@ -204,7 +223,6 @@ export const init = (config) => {
    * @param  {Node} editor HTML Editor Node
    */
   const saveTranslation = (id, translation, editor) => {
-
     // Success Message
     const successMessage = () => {
       editor.classList.add("filter-coursetranslator__success");
@@ -265,22 +283,26 @@ export const init = (config) => {
    * Get the Translation using Moodle Web Service
    * @returns void
    */
-  document.querySelectorAll('.filter-coursetranslator__editor [contenteditable="true"]').forEach((editor) => {
+  document
+    .querySelectorAll(
+      '.filter-coursetranslator__editor [contenteditable="true"]'
+    )
+    .forEach((editor) => {
+      // Save translation
+      editor.addEventListener("focusout", () => {
+        let translation = editor.innerHTML;
+        let id = editor
+          .closest(".filter-coursetranslator__editor")
+          .getAttribute("data-id");
+        window.console.log(id, translation);
 
-    // Save translation
-    editor.addEventListener("focusout", () => {
-      let translation = editor.innerHTML;
-      let id = editor.closest('.filter-coursetranslator__editor').getAttribute('data-id');
-      window.console.log(id, translation);
+        saveTranslation(id, translation, editor);
+      });
 
-      saveTranslation(id, translation, editor);
+      // Remove status classes
+      editor.addEventListener("click", () => {
+        editor.classList.remove("filter-coursetranslator__success");
+        editor.classList.remove("filter-coursetranslator__error");
+      });
     });
-
-    // Remove status classes
-    editor.addEventListener("click", () => {
-      editor.classList.remove("filter-coursetranslator__success");
-      editor.classList.remove("filter-coursetranslator__error");
-    });
-  });
-
 };

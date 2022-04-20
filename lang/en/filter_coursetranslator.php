@@ -44,7 +44,9 @@ $string['supported_languages'] = 'bg,cs,da,de,el,en,es,et,fi,fr,hu,it,ja,lt,lv,n
 
 // Template strings.
 $string['t_select_target_language'] = 'Select Target Language';
-$string['t_word_count'] = 'Total Word Count: {$a}';
+$string['t_word_count'] = 'Word Count: {$a}';
+$string['t_char_count'] = 'Character Count: {$a}';
+$string['t_char_count_spaces'] = 'Character Count with Spaces: {$a}';
 $string['t_autotranslate'] = 'Autotranslate';
 $string['t_id'] = 'ID';
 $string['t_source_text'] = 'Source Text';

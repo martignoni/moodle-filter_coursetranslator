@@ -68,9 +68,16 @@ class translate_page implements renderable, templatable {
         // Process coursetranslator content.
         $coursetranslatorcontent = [];
         $wordcount = 0;
+        $charcount = 0;
+        $charcountspaces = 0;
         foreach ($this->coursetranslators as $item) {
             // Build the wordcount.
-            $wordcount = $wordcount + str_word_count($item->sourcetext);
+            $words = strip_tags($item->sourcetext);
+            $wordcount = $wordcount + str_word_count($words);
+            $charcount = $charcount + strlen($words);
+            $spaces = preg_split('/\s+/', $words);
+            $charcountspaces = $charcountspaces + array_key_last($spaces);
+
             // Add the item to coursetranslators.
             array_push($coursetranslatorcontent, $item);
         }
@@ -91,6 +98,8 @@ class translate_page implements renderable, templatable {
         $data->langs = $langs;
         $data->lang = $this->langs[$this->current_lang];
         $data->wordcount = $wordcount;
+        $data->charcount = $charcount;
+        $data->charcountspaces = $charcountspaces + $charcount;
 
         // Hacky fix but the only way to adjust html...
         // This could be overridden in css and I might look at that fix for the future.

@@ -64,7 +64,7 @@ class filter_coursetranslator extends moodle_text_filter {
     public function filter($text, array $options = []) {
         global $CFG;
 
-        // set options
+        // Set options.
         $this->options = $options;
 
         // No need to translate empty or numeric text.
@@ -74,9 +74,9 @@ class filter_coursetranslator extends moodle_text_filter {
 
         // Get current language.
         $language = current_language();
-        // if ($CFG->lang === $language) {
-        //     return $text;
-        // }
+        if ($CFG->lang === $language) {
+            return $text;
+        }
 
         // Get the text format. Set Plain Format to 0.
         $format = 0;
