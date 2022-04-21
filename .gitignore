@@ -1,1 +1,6 @@
+# System Files
 .DS_Store
+
+# Libraries
+node_modules
+vendor

@@ -15,15 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Full translate
+ * Filter Course Translator
  *
- * @package    filter
+ * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/version.php
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022041300;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2019111200;        // Requires this Moodle version
-$plugin->component = 'filter_translatable'; // Full name of the plugin (used for diagnostics)
+$plugin->component = 'filter_coursetranslator'; // Full name of the plugin (used for diagnostics).
+$plugin->version   = 2022042001;            // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2020061500;            // Requires Moodle 3.9 LTS.
+$plugin->supported = [39, 40];              // Supported Moodle Versions.
+$plugin->maturity  = MATURITY_ALPHA;
+$plugin->release   = 'v0.9.0';

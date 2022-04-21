@@ -1,31 +1,46 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-function filter_translatable_extend_navigation_course($navigation, $course, $coursecontext) {
-    global $COURSE;
+/**
+ * Add Translate Link to Edit Settings
+ *
+ * @param object $navigation
+ * @param object $course
+ * @return void
+ */
+function filter_coursetranslator_extend_navigation_course($navigation, $course) {
 
-    $url = new moodle_url("/filter/translatable/translate.php?course_id=$COURSE->id");
-    $translatecontent = navigation_node::create('Translate Content', $url, navigation_node::TYPE_CUSTOM, 'Translate Content', 'devcourse');
+    // Get current language.
+    $lang = current_language();
+
+    // Build a moodle url.
+    $url = new moodle_url("/filter/coursetranslator/translate.php?course_id=$course->id&course_lang=$lang");
+
+    // Get title of translate page for navigation menu.
+    $title = get_string('pluginname', 'filter_coursetranslator');
+
+    // Navigation node.
+    $translatecontent = navigation_node::create(
+        $title,
+        $url,
+        navigation_node::TYPE_CUSTOM,
+        $title,
+        'translate',
+        new pix_icon('icon', 'icon', 'filter_coursetranslator')
+    );
     $navigation->add_node($translatecontent);
 }
 
-// function filter_translatable_before_footer() {
-//     global $PAGE, $SESSION, $CFG;
-
-//     if (isset($SESSION->filter_translatable->strings)) {
-//         $strings = $SESSION->filter_translatable->strings;
-//     } else {
-//         $strings = [];
-//     }
-
-//     if (has_capability('filter/translatable:edittranslations', \context_system::instance())) {
-//         if (get_config('filter_translatable', 'showstringsinfooter') !=  0) {
-//             foreach ($strings as $key => $value) {
-//                 $id = $key;
-//                 echo  $value .' <a target="_blank" data-action="translation-edit" data-recordid="'.$id.'" href="'.$CFG->wwwroot.'/admin/tool/translationmanager/edit.php?id='.$id.'">
-//                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br/>';
-//             }
-//         }
-//         $PAGE->requires->js_call_amd('tool_translationmanager/translationmanager', 'init');
-//     }
-//     unset($SESSION->filter_translatable->strings);
-// }

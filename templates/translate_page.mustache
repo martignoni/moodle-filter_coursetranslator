@@ -1,35 +1,82 @@
+{{!
+This file is part of Moodle - http://moodle.org/
 
-<div class="translatable-content" data-course-id="{{course.id}}">
+Moodle is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    <div class="container">
-        <div class="row">
-            <form class="col-4 px-0">
-                <div class="form-group">
-                    <label class="d-none">Select Target Language</label>
-                    <select class="form-control">
-                        <option>Select Target Language</option>
-                    </select>
-                </div>
-            </form>
-        </div>
+Moodle is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+<div class="container-fluid">
+  <div class="row">
+    <form class="col-2 pl-0 pr-5">
+      <div class="form-group">
+        <label for="select-target-language"
+          >{{#str}}t_select_target_language,filter_coursetranslator{{/str}}</label
+        >
+        <select
+          name="select-target-language"
+          class="filter-coursetranslator__localeswitcher form-control"
+        >
+          {{#langs}}
+          <option value="{{ code }}" {{selected}}>{{ lang }}</option>
+          {{/langs}}
+        </select>
+      </div>
+    </form>
+    <div class="col-6 px-0">
+      <p>
+        {{#str}}t_word_count,filter_coursetranslator, {{ wordcount }}{{/str}}<br />
+        {{#str}}t_char_count,filter_coursetranslator, {{ charcount }}{{/str}}<br />
+        {{#str}}t_char_count_spaces,filter_coursetranslator, {{ charcountspaces }}{{/str}}
+      </p>
     </div>
-
-    <ul class="container">
-        <li class="row align-items-start border-bottom py-3 bg-primary text-white">
-            <div class="col-1">ID</div>
-            <div class="col-5 px-0">Source Text</div>
-            <div class="col-6 px-0 pl-5">Translation</div>
-        </li>
-
-        {{#translatables}}
-            <li class="row align-items-start border-bottom py-3">
-                <div class="col-1">{{id}}</div>
-                <div class="col-5 px-0 filter-translatable__source-text">{{{sourcetext}}}</div>
-                <div class="col-6 px-0 pl-5 filter-translatable__translation">
-                    <div class="format-{{textformat}} translatable-editor" contenteditable="true" data-id="{{id}}">{{{translation}}}</div>
-                </div>
-            </li>
-        {{/translatables}}
-    </ul>
-
+    <div class="col-4 px-0 mb-3">
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-primary filter-coursetranslator__autotranslate-btn"
+          disabled
+        >
+          {{#str}}t_autotranslate,filter_coursetranslator{{/str}}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="container-fluid">
+  <div class="row align-items-start border-bottom py-3 bg-primary text-white">
+    <div class="col-1">
+      <div class="form-check">
+        <input
+          class="form-check-input filter-coursetranslator__select-all"
+          type="checkbox"
+          aria-label="{{#str}}t_selectall,filter_coursetranslator{{/str}}"
+          title="{{#str}}t_selectall,filter_coursetranslator{{/str}}"
+          name="select-all"
+          disabled
+        />
+        <label class="form-check-label d-none" for="select-all">
+          {{#str}}t_selectall,filter_coursetranslator{{/str}}
+        </label>
+      </div>
+    </div>
+    <div class="col-1">{{#str}}t_id,filter_coursetranslator{{/str}}</div>
+    <div class="col-5 px-0 pr-5">
+      {{#str}}t_source_text,filter_coursetranslator{{/str}}
+    </div>
+    <div class="col-5 px-0">
+      {{#str}}t_translation,filter_coursetranslator,{{ lang }}{{/str}}
+    </div>
+  </div>
+</div>
+
+{{{mform}}}

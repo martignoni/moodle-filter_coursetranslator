@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,21 +15,49 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Full translate
+ * Course Translator Filter
  *
  * @package    filter
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
+ * @copyright  based on work by 2020 Farhan Karmali <farhan6318@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @see        https://docs.moodle.org/dev/Filters
  */
+class filter_coursetranslator extends moodle_text_filter {
 
-defined('MOODLE_INTERNAL') || die();
+    /**
+     * Course Translator Construct
+     *
+     * @param context $context
+     * @param array $localconfig
+     */
+    public function __construct($context, array $localconfig) {
+        global $COURSE;
+        parent::__construct($context, $localconfig);
+        $this->localconfig = $localconfig;
+        $this->course = $COURSE;
+        $this->tablename = 'filter_coursetranslator';
 
-/**
- * Translatable Filter for Moodle
- */
-class filter_translatable extends moodle_text_filter {
-
-    const TABLENAME = 'filter_translatable';
+        switch ($context->contextlevel) {
+            case CONTEXT_SYSTEM:
+                $this->filterctx = false;
+                break;
+            case CONTEXT_USER:
+                $this->filterctx = false;
+                break;
+            case CONTEXT_COURSECAT:
+                $this->filterctx = false;
+                break;
+            case CONTEXT_COURSE:
+                $this->filterctx = $context;
+                break;
+            case CONTEXT_MODULE:
+                $this->filterctx = $context;
+                break;
+            default:
+                $this->filterctx = false;
+        }
+    }
 
     /**
      * Filter
@@ -42,29 +69,69 @@ class filter_translatable extends moodle_text_filter {
     public function filter($text, array $options = []) {
         global $CFG;
 
-        // no need to translate empty or numeric text
-        if (empty($text) or is_numeric($text)) {
+        // Set options.
+        $this->options = $options;
+
+        // No need to translate empty or numeric text.
+        if (
+            empty($text)
+            || is_numeric($text)
+            || $this->filterctx === false
+            || $text === 'Moodle'
+        ) {
             return $text;
         }
 
-        // get current language
+        // Get current language.
         $language = current_language();
-        if ($CFG->lang == $language) {
+        if ($CFG->lang === $language) {
             return $text;
         }
 
-        // get the text format
+        // Get the text format. Set Plain Format to 0.
         $format = 0;
         if (isset($options['originalformat'])) {
-            if ($options['originalformat'] == FORMAT_HTML) {
+            if ($options['originalformat'] === FORMAT_HTML) {
                 $format = FORMAT_HTML;
-            } else if ($options['originalformat'] == FORMAT_PLAIN){
+            } else if ($options['originalformat'] === FORMAT_PLAIN) {
                 $format = 0;
             }
         }
 
-        // return the translation
+        // Return the translation.
         return $this->get_translation($text, $language, $format);
+    }
+
+    /**
+     * Get Translation Edit Link
+     *
+     * @param object $instance
+     * @return void
+     */
+    private function get_translate_link($instance) {
+        $translateurl = new moodle_url('/filter/coursetranslator/translate.php', array(
+            'course_id' => $this->course->id,
+            'mod_id' => $instance->id,
+            'course_lang' => current_language(),
+        ));
+        $instance->set_after_edit_icons(
+            '<a href="' . $translateurl . '" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i></a>
+        '
+        );
+    }
+
+    /**
+     * Get $modconfig
+     *
+     * @param int $id
+     * @param string $name
+     * @return array
+     */
+    private function get_modconfig($id, $name) {
+        return array(
+            'mod_id' => $id,
+            'mod_name' => $name
+        );
     }
 
     /**
@@ -76,42 +143,161 @@ class filter_translatable extends moodle_text_filter {
      * @return void
      */
     public function get_translation($text, $language, $format) {
-        global $DB, $CFG, $SESSION;
-        $hashkey = sha1(trim($text));
-        $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
+        global $DB, $CFG, $PAGE, $SESSION;
+
+        // Get modinfo to avoid database queries.
+        $modinfo = get_fast_modinfo($this->course);
+        $modconfig = null;
+
+        $coursecheck = $this->get_coursecheck($text);
+        if ($coursecheck) {
+            $modconfig = $coursecheck;
+        }
+
+        $sectionscheck = $this->get_sectionscheck($text, $modinfo);
+        if ($sectionscheck) {
+            $modconfig = $sectionscheck;
+        }
+
+        $activitiescheck = $this->get_activitiescheck($text, $modinfo);
+        if ($activitiescheck) {
+            $modconfig = $activitiescheck;
+        }
+
+        // Could not build modconfig, return original text.
+        if (!$modconfig) {
+            return $text;
+        }
+        ksort($modconfig);
+        $hashstring = implode('/', $modconfig);
+        $hashkey = sha1(trim($hashstring));
+
+        // Get translation from database.
+        $records = $DB->get_records($this->tablename, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
         if (isset(reset($records)->translation)) {
             $translatedtext = reset($records)->translation;
         }
 
-        // get translation if it exists
+        // Get translation if it exists else generate translation.
         if (isset($translatedtext)) {
-            $DB->set_field(self::TABLENAME, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
-        }
-        // generate translation
-        else {
+            $DB->set_field($this->tablename, 'lastaccess', time(), ['hashkey' => $hashkey, 'lang' => $language]);
+        } else {
             $translatedtext = $this->generate_translation_update_database($text, $language, $hashkey, $format);
         }
 
-        // check for permission to translate
-        if (has_capability('filter/translatable:edittranslations', $this->context)) {
-
-            $records = $DB->get_records(self::TABLENAME, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'id', 0, 1);
-            $id = reset($records)->id;
-
-            if (!isset($SESSION->filter_translatable)) {
-                $SESSION->filter_translatable = new stdClass();
-                $SESSION->filter_translatable->strings = [];
-            } else {
-                $SESSION->filter_translatable->strings[$id] = $translatedtext;
-            }
-
-            // edit link
-            $translatedtext .= '<a target="_blank" data-action="translation-edit" data-recordid="'.$id.'" href="'.$CFG->wwwroot.'/admin/tool/translationmanager/edit.php?id='.$id.'">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-        }
-
-        // return the edit link
+        // Return the translated text for display.
         return $translatedtext;
+
+        // $this->get_translate_link($instance);
+    }
+
+    /**
+     * Course Check
+     *
+     * @param string $text
+     * @return array|false
+     */
+    public function get_coursecheck($text) {
+        if ($this->context->contextlevel === CONTEXT_COURSE) {
+            $modcol = array_search($text, (array) $this->course);
+            // Return modconfig.
+            if ($modcol) {
+                $modconfig = array(
+                    'mod_id' => $this->course->id,
+                    'mod_name' => 'course',
+                    'mod_col' => $modcol,
+                    'ctx_instance_id' => $this->context->id,
+                    'ctx_path' => $this->context->path,
+                );
+                return $modconfig;
+            } else {
+                return false;
+            }
+        } else {
+            // Nothing found.
+            return false;
+        }
+    }
+
+    /**
+     * Sections Check
+     *
+     * @param string $text
+     * @param object $modinfo
+     * @return array|false
+     */
+    public function get_sectionscheck($text, $modinfo) {
+
+        if ($this->context->contextlevel === CONTEXT_COURSE) {
+            // Parse through sections.
+            $sections = $modinfo->get_section_info_all();
+            foreach ($sections as $section) {
+                if ($text === $section->summary) {
+                    $modconfig = array(
+                        'mod_id' => $section->id,
+                        'ctx_instance_id' => $this->context->id,
+                        'ctx_path' => $this->context->path,
+                        'mod_name' => 'section',
+                        'mod_col' => 'summary',
+                    );
+                    return $modconfig;
+                }
+                if ($text === $section->name) {
+                    $modconfig = array(
+                        'mod_id' => $section->id,
+                        'ctx_instance_id' => $this->context->id,
+                        'ctx_path' => $this->context->path,
+                        'mod_name' => 'section',
+                        'mod_col' => 'name',
+                    );
+                    return $modconfig;
+                }
+            }
+        } else {
+            // Nothing found.
+            return false;
+        }
+    }
+
+    /**
+     * Activities Check
+     *
+     * @param string $text
+     * @param object $modinfo
+     * @return array|false
+     */
+    public function get_activitiescheck($text, $modinfo) {
+        global $DB;
+
+        if ($this->context->contextlevel === CONTEXT_MODULE) {
+            // Parse through modules.
+            $activities = $modinfo->get_array_of_activities($this->course);
+            foreach ($activities as $activity) {
+                if ($activity->cm === $this->context->instanceid) {
+                    $record = $DB->get_record($activity->mod, array('id' => $activity->id));
+                    $data = array_merge((array) $record, (array) $activity);
+                    $modconfig = array(
+                        'mod_id' => $activity->id,
+                        'ctx_instance_id' => $this->context->id,
+                        'ctx_path' => $this->context->path,
+                        'mod_name' => $activity->mod,
+                    );
+                    $recordcol = array_search($text, (array) $record);
+                    $activitycol = array_search($text, (array) $activity);
+                    if ($activitycol) {
+                        $modconfig['mod_col'] = $activitycol;
+                    } else if ($recordcol) {
+                        $modconfig['mod_col'] = $recordcol;
+                    } else {
+                        unset($modconfig);
+                    }
+                    return $modconfig;
+                }
+            }
+        } else {
+            // Nothing found.
+            return false;
+        }
     }
 
     /**
@@ -121,38 +307,34 @@ class filter_translatable extends moodle_text_filter {
      * @param string $language
      * @param string $hashkey
      * @param int $format
+     * @param array $modconfig
      * @return void
      */
     public function generate_translation_update_database($text, $language, $hashkey, $format) {
-        global $DB, $PAGE, $CFG, $COURSE;
-        $course_id = $COURSE->id;
+        global $DB, $PAGE, $CFG;
+
+        // Processing vars.
+        $this->courseid = $this->course->id;
         $translation = $this->generate_translation($text, $language);
 
-        if ($translation) {
-           $hidefromtable = 0;
-        } else {
-            $translation = $text;
-            $hidefromtable = 1;
-        }
-
-        // build the translation record
+        // Build the translation record.
         $record = (object) [
-            'course_id' => isset($course_id) ? $course_id : 0, // set to 0 if course_id not found to avoid null errors
+            'course_id' => isset($this->courseid) ? $this->courseid : 0, // Set to 0 if course_id not found to avoid null errors.
             'hashkey' => $hashkey,
             'sourcetext' => $text,
-            'textformat' => $format ? 'html' : 'plain',
-            'timecreated' => time(),
+            'textformat' => boolval($format) ? 'html' : 'plain',
             'lang' => $language,
+            'sourcelang' => $CFG->lang,
             'url' => str_replace($CFG->wwwroot, '', $PAGE->url->out()),
             'automatic' => true,
             'translation' => $translation,
-            'hidefromtable' => $hidefromtable
+            'timecreated' => time(),
         ];
 
-        // insert the record into the database
-        $DB->insert_record(self::TABLENAME, $record);
+        // Insert the record into the database.
+        $DB->insert_record($this->tablename, $record);
 
-        // return the translation
+        // Return the translation.
         return $translation;
     }
 
@@ -166,36 +348,49 @@ class filter_translatable extends moodle_text_filter {
     public function generate_translation($text, $language) {
         global $CFG;
 
-        // return existing text if machine translation disabled
-        if (get_config('filter_translatable', 'usedeepl') ==  0) {
+        // Return existing text if machine translation disabled.
+        if (boolval(get_config('filter_coursetranslator', 'usedeepl')) === false) {
             return $text;
         }
 
-        // get the language
-        $language = str_replace('_wp', '', $language);
-        require_once($CFG->libdir. "/filelib.php");
+        // Autotranslate not enabled.
+        if (boolval(get_config('filter_coursetranslator', 'ondemand_autotranslate')) === false) {
+            return $text;
+        }
 
-        // build new curl request
+        // Supported languages.
+        $supportedlangsstring = get_string('supported_languages', 'filter_coursetranslator');
+        $supportedlanguages = explode(',', $supportedlangsstring);
+
+        // Get the language.
+        $language = str_replace('_wp', '', $language);
+        $supported = in_array(strtolower($language), array_map('strtolower', $supportedlanguages));
+
+        // Language unsupported.
+        if (!$supported) {
+            return $text;
+        }
+
+        // Build new curl request.
+        require_once($CFG->libdir. "/filelib.php");
         $curl = new curl();
         $params = [
             'text' => $text,
-            'source_lang' => 'en',
+            'source_lang' => $CFG->lang,
             'target_lang' => $language,
             'preserve_formatting' => 1,
-            'auth_key' => get_config('filter_translatable', 'apikey'),
+            'auth_key' => get_config('filter_coursetranslator', 'apikey'),
             'tag_handling' => 'xml',
             'split_sentences' => 'nonewlines'
         ];
         $resp = $curl->post('https://api.deepl.com/v2/translate?', $params);
         $resp = json_decode($resp);
 
-        // get the translation
-        if (!empty($resp->data->translations[0]->text)
-                && $resp->data->translations[0]->detected_source_language=== $language) {
-            return $resp->data->translations[0]->text;
-        }
-        // fallback if translation fails
-        else {
+        // Get the translation and return translation.
+        if (!empty($resp->translations[0]->text)
+                && $resp->translations[0]->detected_source_language !== $language) {
+            return $resp->translations[0]->text;
+        } else {
             return $text;
         }
     }
