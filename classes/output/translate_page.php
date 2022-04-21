@@ -67,15 +67,21 @@ class translate_page implements renderable, templatable {
         // Process coursetranslator content.
         $coursetranslatorcontent = [];
         $wordcount = 0;
-        $charcount = 0;
         $charcountspaces = 0;
+        $spaces = 0;
         foreach ($this->coursetranslators as $item) {
-            // Build the wordcount.
-            $words = strip_tags($item->sourcetext);
-            $wordcount = $wordcount + str_word_count($words);
-            $charcount = $charcount + strlen($words);
-            $spaces = preg_split('/\s+/', $words);
-            $charcountspaces = $charcountspaces + array_key_last($spaces);
+
+            // Get the wordcount.
+            $wcwords = strip_tags($item->sourcetext);
+            $wordcount = $wordcount + str_word_count($wcwords);
+
+            // Get the character count with spaces.
+            $cswords = strip_tags($item->sourcetext);
+            $charcountspaces = $charcountspaces + strlen($cswords);
+
+            // Get the character count without spaces.
+            $ccwords = strip_tags($item->sourcetext);
+            $spaces = $spaces + array_key_last(preg_split('/\s+/', $ccwords));
 
             // Add the item to coursetranslators.
             array_push($coursetranslatorcontent, $item);
@@ -97,8 +103,8 @@ class translate_page implements renderable, templatable {
         $data->langs = $langs;
         $data->lang = $this->langs[$this->current_lang];
         $data->wordcount = $wordcount;
-        $data->charcount = $charcount;
-        $data->charcountspaces = $charcountspaces + $charcount;
+        $data->charcountspaces = $charcountspaces;
+        $data->charcount = $charcountspaces - $spaces;
 
         // Hacky fix but the only way to adjust html...
         // This could be overridden in css and I might look at that fix for the future.

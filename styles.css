@@ -27,24 +27,6 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
     max-width: 100%;
 }
 
-/* scroll window */
-.filter-coursetranslator__scroll {
-    overflow: scroll;
-    height: 375px;
-    padding-top: 58px;
-}
-
-.filter-coursetranslator__scroll::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
-.filter-coursetranslator__scroll::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-}
-
 /* editor tweaks */
 .filter-coursetranslator__translation .filter-coursetranslator__editor,
 .filter-coursetranslator__translation [data-fieldtype="editor"] {

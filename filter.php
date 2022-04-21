@@ -23,8 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see        https://docs.moodle.org/dev/Filters
  */
-class filter_coursetranslator extends moodle_text_filter
-{
+class filter_coursetranslator extends moodle_text_filter {
 
     /**
      * Course Translator Construct
@@ -171,7 +170,7 @@ class filter_coursetranslator extends moodle_text_filter
         }
         ksort($modconfig);
         $hashstring = implode('/', $modconfig);
-        $hashkey = sha1(trim($text));
+        $hashkey = sha1(trim($hashstring));
 
         // Get translation from database.
         $records = $DB->get_records($this->tablename, ['hashkey' => $hashkey, 'lang' => $language], 'id ASC', 'translation', 0, 1);
@@ -200,31 +199,16 @@ class filter_coursetranslator extends moodle_text_filter
      */
     public function get_coursecheck($text) {
         if ($this->context->contextlevel === CONTEXT_COURSE) {
-            $modconfig = array(
-                'mod_id' => $this->course->id,
-                'mod_name' => 'course',
-                'ctx_instance_id' => $this->context->id,
-                'ctx_path' => $this->context->path,
-            );
-            switch ($text) {
-                case $this->course->fullname:
-                    $modconfig['mod_col'] = 'fullname';
-                    break;
-
-                case $this->course->shortname:
-                    $modconfig['mod_col'] = 'shortname';
-                    break;
-
-                case $this->course->summary:
-                    $modconfig['mod_col'] = 'summary';
-                    break;
-
-                default:
-                    unset($modconfig);
-                    break;
-            }
+            $modcol = array_search($text, (array) $this->course);
             // Return modconfig.
-            if ($modconfig) {
+            if ($modcol) {
+                $modconfig = array(
+                    'mod_id' => $this->course->id,
+                    'mod_name' => 'course',
+                    'mod_col' => $modcol,
+                    'ctx_instance_id' => $this->context->id,
+                    'ctx_path' => $this->context->path,
+                );
                 return $modconfig;
             } else {
                 return false;
@@ -348,7 +332,7 @@ class filter_coursetranslator extends moodle_text_filter
         ];
 
         // Insert the record into the database.
-        // $DB->insert_record($this->tablename, $record);
+        $DB->insert_record($this->tablename, $record);
 
         // Return the translation.
         return $translation;
