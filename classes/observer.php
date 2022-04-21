@@ -15,19 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Course Translator
- *
+ * Course Translator Observer
  * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://docs.moodle.org/dev/version.php
+ * @see        https://docs.moodle.org/dev/Events_API
  */
 
-defined('MOODLE_INTERNAL') || die();
+class filter_coursetranslator_observer {
 
-$plugin->component = 'filter_coursetranslator'; // Full name of the plugin (used for diagnostics).
-$plugin->version   = 2022042001;            // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2020061500;            // Requires Moodle 3.9 LTS.
-$plugin->supported = [39, 40];              // Supported Moodle Versions.
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = 'v0.9.0';
+    public static function course_updated(\core\event\course_updated $event) {
+        print_object($event);
+        die();
+    }
+
+    public static function course_section_updated(\core\event\course_section_updated $event) {
+        print_object($event);
+        die();
+    }
+
+    public static function course_module_updated(\core\event\course_module_updated $event) {
+        global $DB;
+        $data = $event->get_data();
+        $context = $event->get_context();
+        print_object($DB->get_record($data['other']['modulename'], array('id' => $data['other']['instanceid'])), '*', 0);
+        print_object($event->get_context());
+        die();
+    }
+}

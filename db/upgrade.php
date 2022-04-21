@@ -40,8 +40,6 @@ function xmldb_filter_coursetranslator_upgrade($oldversion) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('course_id', XMLDB_TYPE_BIGINT, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('hashkey', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('mod_name', XMLDB_TYPE_CHAR, '11', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('mod_id', XMLDB_TYPE_INTEGER, '10', XMLDB_NOTNULL, null, null, null);
         $table->add_field('sourcetext', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
         $table->add_field('textformat', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null);
         $table->add_field('lang', XMLDB_TYPE_CHAR, '10', null, XMLDB_NOTNULL, null, null);
@@ -66,6 +64,12 @@ function xmldb_filter_coursetranslator_upgrade($oldversion) {
 
         // Course Translator savepoint reached.
         upgrade_plugin_savepoint(true, 2022042000, 'filter', 'coursetranslator');
+    }
+
+    // Event observers added.
+    if ($oldversion < 2022042001) {
+        // Course Translator savepoint reached.
+        upgrade_plugin_savepoint(true, 2022042001, 'filter', 'coursetranslator');
     }
 
 }

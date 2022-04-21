@@ -15,19 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Filter Course Translator
- *
+ * Course Translator Events
  * @package    filter_coursetranslator
  * @copyright  2022 Kaleb Heitzman <kaleb@jamfire.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @see        https://docs.moodle.org/dev/version.php
+ * @see        https://docs.moodle.org/dev/Events_API
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'filter_coursetranslator'; // Full name of the plugin (used for diagnostics).
-$plugin->version   = 2022042001;            // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2020061500;            // Requires Moodle 3.9 LTS.
-$plugin->supported = [39, 40];              // Supported Moodle Versions.
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = 'v0.9.0';
+$observers = array(
+
+    array(
+        'eventname' => '\core\event\course_updated',
+        'callback' => 'filter_coursetranslator_observer::course_updated',
+    ),
+
+    array(
+        'eventname' => '\core\event\course_section_updated',
+        'callback' => 'filter_coursetranslator_observer::course_section_updated',
+    ),
+
+    array(
+        'eventname' => '\core\event\course_module_updated',
+        'callback' => 'filter_coursetranslator_observer::course_module_updated',
+    ),
+
+);
